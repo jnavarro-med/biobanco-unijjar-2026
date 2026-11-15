@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biobanco Digital de Datos Biomédicos | UNIJJAR - MINSA 2026</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              unijjar: {
+                navy: '#1B1464',
+                navyLight: '#281F85',
+                gold: '#FFD700',
+                goldDark: '#D4AF37',
+                red: '#D32F2F',
+                slate: '#F8FAFC'
+              }
+            }
+          }
+        }
+      };
+    }
+  </script>
+  <style>
+    /* Estilos base de respaldo para garantizar diseño y clics incluso sin CDN */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #F1F5F9;
+      color: #1E293B;
+      margin: 0;
+    }
+    button, [role="button"], select, input[type="checkbox"] {
+      cursor: pointer;
+    }
+    .hidden {
+      display: none !important;
+    }
+    .tab-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background-color: #1B1464 !important;
+      color: #FFFFFF !important;
+      border-bottom: 3px solid #FFD700 !important;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- ENCABEZADO INSTITUCIONAL UNIJJAR -->
+  <header class="bg-[#1B1464] text-white shadow-lg border-b-4 border-[#FFD700] no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Escudo SVG + Identidad Institucional -->
+        <div class="flex items-center gap-4">
+          <div class="flex-shrink-0 bg-white p-1.5 rounded-xl shadow-md">
+            <!-- Escudo Vectorial SVG UNIJJAR -->
+            <svg width="58" height="64" viewBox="0 0 120 135" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Escudo Oficial UNIJJAR">
+              <!-- Contorno Exterior Escudo -->
+              <path d="M10 12 H110 V65 C110 98 60 126 60 126 C60 126 10 98 10 65 V12 Z" fill="#1B1464" stroke="#FFD700" stroke-width="5"/>
+              <!-- Borde Interno Rojo Acento -->
+              <path d="M17 19 H103 V64 C103 91 60 117 60 117 C60 117 17 91 17 64 V19 Z" stroke="#D32F2F" stroke-width="3" fill="none"/>
+              <!-- Antorcha del Conocimiento -->
+              <rect x="56" y="48" width="8" height="32" rx="2" fill="#FFD700"/>
+              <path d="M51 48 H69 L65 55 H55 L51 48 Z" fill="#D32F2F"/>
+              <!-- Llama -->
+              <path d="M60 24 C67 33 70 40 60 47 C50 40 53 33 60 24 Z" fill="#FFD700"/>
+              <path d="M60 30 C64 36 65 40 60 45 C55 40 56 36 60 30 Z" fill="#D32F2F"/>
+              <!-- Libro Abierto de la Ciencia -->
+              <path d="M32 76 Q46 71 60 77 Q74 71 88 76 V90 Q74 85 60 91 Q46 85 32 90 Z" fill="#FFFFFF" stroke="#FFD700" stroke-width="1.5"/>
+              <line x1="60" y1="77" x2="60" y2="91" stroke="#1B1464" stroke-width="2"/>
+              <!-- Siglas UNIJJAR -->
+              <text x="60" y="106" text-anchor="middle" fill="#FFD700" font-family="Inter, sans-serif" font-weight="800" font-size="13" letter-spacing="0.5">UNIJJAR</text>
+            </svg>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider bg-[#FFD700] text-[#1B1464] rounded-full">
+                Facultad de Ciencias Médicas
+              </span>
+              <span class="px-2.5 py-0.5 text-xs font-semibold bg-[#D32F2F] text-white rounded-full">
+                II Semestre 2026 • Managua
+              </span>
+            </div>
+            <h1 class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight mt-1 text-white">
+              Universidad Jean-Jacques Rousseau (UNIJJAR)
+            </h1>
+            <p class="text-xs sm:text-sm text-indigo-100 font-medium">
+              Biobanco Digital de Datos Biomédicos e Historia Clínica Electrónica (Normativa 004 MINSA)
+            </p>
+            <p class="text-[11px] text-[#FFD700] font-semibold tracking-widest uppercase mt-0.5">
+              “Éxito - Tecnología - Sabiduría”
+            </p>
+          </div>
+        </div>
+
+        <!-- Créditos de Autoría -->
+        <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl px-4 py-2.5 text-xs">
+          <p class="text-[#FFD700] font-bold uppercase tracking-wider text-[10px] mb-1">Autora (Medicina)</p>
+          <ul class="space-y-0.5 text-indigo-50">
+            <li>• Navarro Ruiz Jekseling Alicia <span class="text-indigo-200 font-mono">(26-00051)</span></li>
+          </ul>
+          <p class="mt-1 pt-1 border-t border-white/15 text-indigo-200">
+            <span class="font-semibold text-white">Asesor:</span> Msc. Bayardo González
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN PRINCIPAL (5 PESTAÑAS) -->
+    <nav class="bg-white text-slate-700 border-t border-slate-200 shadow-sm">
+      <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div class="flex overflow-x-auto custom-scrollbar">
+          <button type="button" onclick="switchTab('inicio')" id="tab-inicio" class="tab-btn active flex items-center gap-2 px-4 py-3.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors hover:bg-slate-100">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+            1. Inicio y Metodología
+          </button>
+          <button type="button" onclick="switchTab('clinica')" id="tab-clinica" class="tab-btn flex items-center gap-2 px-4 py-3.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors hover:bg-slate-100">
+            <i data-lucide="file-plus-2" class="w-4 h-4"></i>
+            2. Historia Clínica MINSA (Médico)
+          </button>
+          <button type="button" onclick="switchTab('biobanco')" id="tab-biobanco" class="tab-btn flex items-center gap-2 px-4 py-3.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors hover:bg-slate-100">
+            <i data-lucide="database" class="w-4 h-4"></i>
+            3. Biobanco Digital
+          </button>
+          <button type="button" onclick="switchTab('paciente')" id="tab-paciente" class="tab-btn flex items-center gap-2 px-4 py-3.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors hover:bg-slate-100">
+            <i data-lucide="user-check" class="w-4 h-4"></i>
+            4. Portal del Paciente
+          </button>
+          <button type="button" onclick="switchTab('bioestadistica')" id="tab-bioestadistica" class="tab-btn flex items-center gap-2 px-4 py-3.5 text-xs sm:text-sm font-semibold whitespace-nowrap transition-colors hover:bg-slate-100">
+            <i data-lucide="bar-chart-3" class="w-4 h-4"></i>
+            5. Bioestadística y Ciencias Básicas
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 1: INICIO Y METODOLOGÍA                                       -->
+    <!-- ===================================================================== -->
+    <section id="view-inicio" class="space-y-6">
+      <!-- Banner Ético Institucional -->
+      <div class="bg-amber-50 border-l-4 border-[#D32F2F] rounded-xl p-4 sm:p-5 shadow-sm flex flex-col sm:flex-row items-start gap-4">
+        <div class="p-2.5 bg-[#D32F2F]/10 text-[#D32F2F] rounded-lg flex-shrink-0">
+          <i data-lucide="shield-alert" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h2 class="text-sm sm:text-base font-bold text-slate-900">
+            Declaración Ética, Normativa y Alcance Académico del Biobanco Digital
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-700 mt-1 leading-relaxed">
+            Esta plataforma constituye una <strong>estructura digital exclusivamente académica y formativa</strong> diseñada para estudiantes de la carrera de Medicina de la Universidad Jean-Jacques Rousseau (UNIJJAR, Managua). <strong>No almacena muestras biológicas físicas</strong> (tejidos, sangre o ADN) ni emite diagnósticos médicos automatizados. Toda información clínica se gestiona bajo anonimización codificada (<code class="bg-amber-100 px-1.5 py-0.5 rounded font-mono text-xs">UNIJJAR-2026-XXX</code>), consentimiento informado simulado y estricto apego a la <strong>Normativa 004 del Ministerio de Salud (MINSA) de Nicaragua</strong> y estándares de referencia de la <strong>Organización Mundial de la Salud (OMS)</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- Métricas Rápidas en Tiempo Real -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 border-t-4 border-t-[#1B1464]">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Total Registros Biobanco</span>
+            <span class="p-2 bg-[#1B1464]/10 text-[#1B1464] rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></span>
+          </div>
+          <p id="kpi-total" class="text-3xl font-extrabold text-[#1B1464] mt-2">5</p>
+          <p class="text-xs text-slate-500 mt-1">Expedientes anonimizados activos</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 border-t-4 border-t-emerald-600">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Promedio IMC Cohorte</span>
+            <span class="p-2 bg-emerald-50 text-emerald-700 rounded-lg"><i data-lucide="scale" class="w-5 h-5"></i></span>
+          </div>
+          <p id="kpi-imc" class="text-3xl font-extrabold text-slate-800 mt-2">0.0 <span class="text-sm font-medium text-slate-500">kg/m²</span></p>
+          <p id="kpi-imc-badge" class="text-xs text-emerald-700 font-medium mt-1">Referencia OMS: 18.5 - 24.9 kg/m²</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 border-t-4 border-t-amber-500">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Promedio Glucosa Basal</span>
+            <span class="p-2 bg-amber-50 text-amber-700 rounded-lg"><i data-lucide="droplet" class="w-5 h-5"></i></span>
+          </div>
+          <p id="kpi-glucosa" class="text-3xl font-extrabold text-slate-800 mt-2">0.0 <span class="text-sm font-medium text-slate-500">mg/dL</span></p>
+          <p class="text-xs text-slate-500 mt-1">Normal OMS: 70 - 99 mg/dL</p>
+        </div>
+
+        <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 border-t-4 border-t-[#D32F2F]">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Antecedentes Familiares</span>
+            <span class="p-2 bg-red-50 text-[#D32F2F] rounded-lg"><i data-lucide="dna" class="w-5 h-5"></i></span>
+          </div>
+          <p id="kpi-antecedentes" class="text-3xl font-extrabold text-[#D32F2F] mt-2">0%</p>
+          <p class="text-xs text-slate-500 mt-1">Con carga heredofamiliar registrada</p>
+        </div>
+      </div>
+
+      <!-- Objetivo General -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="target" class="w-5 h-5 text-[#FFD700]"></i>
+            <h2 class="text-base font-bold">Objetivo General de la Investigación</h2>
+          </div>
+          <span class="text-xs bg-white/15 px-3 py-1 rounded-full text-[#FFD700] font-semibold">Protocolo UNIJJAR 2026</span>
+        </div>
+        <div class="p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+            Diseñar e implementar un prototipo funcional de <strong>Biobanco Digital de Datos Biomédicos</strong> articulado con la <strong>Historia Clínica Electrónica del Adulto (Normativa 004 del MINSA)</strong>, orientado a fortalecer las competencias de integración clínico-básica, análisis bioestadístico y alfabetización digital en los estudiantes de Medicina de la Universidad Jean-Jacques Rousseau (UNIJJAR), Managua, durante el II semestre de 2026.
+          </p>
+          <button type="button" onclick="switchTab('clinica')" class="flex-shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#1B1464] hover:bg-[#281F85] text-white font-bold text-xs sm:text-sm rounded-xl shadow-sm transition">
+            <i data-lucide="file-plus-2" class="w-4 h-4 text-[#FFD700]"></i>
+            Nueva Historia Clínica
+          </button>
+        </div>
+      </div>
+
+      <!-- 6 Objetivos Específicos Interactivos -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-6 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <i data-lucide="list-checks" class="w-5 h-5 text-[#FFD700]"></i>
+            <h2 class="text-base font-bold">Objetivos Específicos, Técnicas y Productos Esperados</h2>
+          </div>
+          <span class="text-xs text-indigo-200 hidden sm:inline">Seleccione un objetivo para ver detalle</span>
+        </div>
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="objetivos-grid">
+          <!-- Renderizado dinámicamente por JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 2: HISTORIA CLÍNICA MINSA (MÉDICO)                            -->
+    <!-- ===================================================================== -->
+    <section id="view-clinica" class="hidden space-y-6">
+      <!-- Barra superior del formulario -->
+      <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 bg-[#1B1464] text-white text-xs font-bold rounded">NORMATIVA 004 - MINSA</span>
+            <span class="text-xs font-semibold text-slate-500">República de Nicaragua</span>
+          </div>
+          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mt-1">Historia Clínica del Adulto y Captura Biomédica</h2>
+          <p class="text-xs text-slate-500">Complete los datos clínicos. Los indicadores fisiológicos y bioquímicos se evalúan en tiempo real según criterios OMS.</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button type="button" onclick="autofillClinicalCase()" class="inline-flex items-center gap-2 px-4 py-2.5 bg-[#FFD700] hover:bg-amber-400 text-[#1B1464] font-bold text-xs sm:text-sm rounded-xl shadow-sm transition">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            Autocompletar Caso de Ejemplo
+          </button>
+          <button type="button" onclick="resetClinicalForm()" class="inline-flex items-center gap-2 px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm rounded-xl transition">
+            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+            Limpiar
+          </button>
+        </div>
+      </div>
+
+      <form id="minsa-form" onsubmit="handleSaveClinicalRecord(event)" class="space-y-6">
+        <!-- SECCIÓN 0: ENCABEZADO ADMINISTRATIVO -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3 flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-wide">Encabezado Administrativo del Expediente</h3>
+            <span class="text-xs text-[#FFD700] font-mono" id="preview-exp-badge">MINSA-2026-006</span>
+          </div>
+          <div class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="lg:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Establecimiento de Salud *</label>
+              <input type="text" id="hc-establecimiento" required value="Clínica Docente UNIJJAR / SILAIS Managua" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-[#1B1464] focus:border-[#1B1464]">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">No. Expediente (Automático)</label>
+              <input type="text" id="hc-expediente" readonly class="w-full rounded-lg border border-slate-200 bg-slate-100 px-3 py-2 text-sm font-mono font-bold text-[#1B1464]">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">No. INSS</label>
+              <input type="text" id="hc-inss" placeholder="Ej. 2458963-1" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+
+            <div class="lg:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Nombres y Apellidos del Paciente *</label>
+              <input type="text" id="hc-nombre" required placeholder="Ej. Carlos Alberto Mendoza Ríos" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">No. Cédula de Identidad *</label>
+              <input type="text" id="hc-cedula" required placeholder="001-150498-1024K" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Servicio / Sala</label>
+              <input type="text" id="hc-servicio" value="Consulta Externa - Medicina Interna" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha de Atención *</label>
+              <input type="date" id="hc-fecha" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Hora *</label>
+              <input type="time" id="hc-hora" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">No. Cama / Consultorio</label>
+              <input type="text" id="hc-cama" value="Consultorio 03" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN I: DATOS PERSONALES -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold uppercase tracking-wide">I. Datos Personales (Filiación)</h3>
+          </div>
+          <div class="p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Edad (años) *</label>
+              <input type="number" id="hc-edad" min="18" max="110" required placeholder="24" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Sexo Biológico *</label>
+              <select id="hc-sexo" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="Femenino">Femenino</option>
+                <option value="Masculino">Masculino</option>
+              </select>
+            </div>
+            <div class="lg:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Fecha y Lugar de Nacimiento</label>
+              <input type="text" id="hc-nacimiento" placeholder="15/04/2002 - Managua, Nicaragua" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Procedencia</label>
+              <select id="hc-procedencia" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="Urbana">Urbana</option>
+                <option value="Rural">Rural</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Religión</label>
+              <input type="text" id="hc-religion" placeholder="Católica / Evangélica / Otra" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Escolaridad</label>
+              <input type="text" id="hc-escolaridad" placeholder="Universitaria" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Profesión u Oficio</label>
+              <input type="text" id="hc-profesion" placeholder="Estudiante de Medicina" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+
+            <div class="lg:col-span-2">
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Dirección Habitual</label>
+              <input type="text" id="hc-direccion" placeholder="Distrito III, Managua" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre del Padre</label>
+              <input type="text" id="hc-padre" placeholder="Nombre completo del padre" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Nombre de la Madre</label>
+              <input type="text" id="hc-madre" placeholder="Nombre completo de la madre" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Fuente de Información</label>
+              <select id="hc-fuente" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="Directa (Paciente)">Directa (Paciente)</option>
+                <option value="Indirecta (Familiar)">Indirecta (Familiar)</option>
+                <option value="Mixta">Mixta</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Confiabilidad</label>
+              <select id="hc-confiabilidad" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                <option value="Buena">Buena</option>
+                <option value="Regular">Regular</option>
+                <option value="Deficiente">Deficiente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIONES II, III, IV: ANAMNESIS -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold uppercase tracking-wide">II, III y IV. Motivo de Consulta, Enfermedad Actual e Interrogatorio por Sistemas</h3>
+          </div>
+          <div class="p-5 space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">II. Motivo de Consulta *</label>
+              <input type="text" id="hc-motivo" required placeholder="Ej. Chequeo médico preventivo y tamizaje metabólico universitario" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">III. Historia de la Enfermedad Actual *</label>
+              <textarea id="hc-hea" rows="2" required placeholder="Descripción cronológica de síntomas, evolución y estado actual..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">IV. Interrogatorio por Aparatos y Sistemas</label>
+              <textarea id="hc-sistemas" rows="2" placeholder="Cardiovascular, respiratorio, digestivo, genitourinario, endocrino, neurológico..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN V: ANTECEDENTES FAMILIARES PATOLÓGICOS -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-sm font-bold uppercase tracking-wide">V. Antecedentes Familiares Patológicos</h3>
+            <div class="flex items-center gap-2 text-xs">
+              <span class="text-indigo-200">Respaldo del antecedente:</span>
+              <select id="hc-respaldo-genetico" class="bg-white text-[#1B1464] font-semibold rounded px-2 py-1 text-xs">
+                <option value="Declarado en Anamnesis">Declarado en Anamnesis</option>
+                <option value="Prueba Genética Documentada">Prueba Genética Documentada</option>
+                <option value="Sin Antecedentes Relevantes">Sin Antecedentes Relevantes</option>
+              </select>
+            </div>
+          </div>
+          <div class="p-5 space-y-5">
+            <!-- Infecto-contagiosas -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-[#1B1464] border-b border-slate-200 pb-1.5 mb-3">
+                A. Enfermedades Infecto-Contagiosas en la Familia
+              </h4>
+              <div id="fam-infecto-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs">
+                <!-- Renderizado por JS -->
+              </div>
+            </div>
+            <!-- Hereditarias -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-[#D32F2F] border-b border-slate-200 pb-1.5 mb-3">
+                B. Enfermedades Hereditarias / Crónico-Degenerativas
+              </h4>
+              <div id="fam-hered-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 text-xs">
+                <!-- Renderizado por JS -->
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Detalle de Parentesco y Observaciones Heredofamiliares</label>
+              <input type="text" id="hc-fam-detalle" placeholder="Ej. Madre con Diabetes Mellitus Tipo 2; abuelo paterno con Hipertensión Arterial" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIONES VI y VII: ANTECEDENTES PERSONALES -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold uppercase tracking-wide">VI y VII. Antecedentes Personales No Patológicos y Patológicos</h3>
+          </div>
+          <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- VI. No Patológicos -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-[#1B1464] border-b border-slate-200 pb-1">VI. Personales No Patológicos</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Esquema de Inmunizaciones</label>
+                  <input type="text" id="hc-inmunizaciones" placeholder="Completo (PAI MINSA + COVID-19)" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Horas de Sueño / Día</label>
+                  <input type="text" id="hc-sueno" placeholder="6 - 7 horas" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Horas Laborales / Estudio</label>
+                  <input type="text" id="hc-laboral" placeholder="8 horas académicas" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Actividad Física</label>
+                  <input type="text" id="hc-actividad" placeholder="Caminata 3 veces/semana" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div class="sm:col-span-2">
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Alimentación Habitual</label>
+                  <input type="text" id="hc-alimentacion" placeholder="3 tiempos de comida, dieta balanceada" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Tabaco / Alcohol</label>
+                  <input type="text" id="hc-tabaco-alcohol" placeholder="Niega tabaquismo; alcohol ocasional" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Drogas Ilegales / Fármacos</label>
+                  <input type="text" id="hc-drogas-farmacos" placeholder="Niega drogas; sin fármacos crónicos" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+              </div>
+            </div>
+
+            <!-- VII. Patológicos -->
+            <div class="space-y-3">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-[#1B1464] border-b border-slate-200 pb-1">VII. Personales Patológicos</h4>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Enfermedades Infecto-Contagiosas Previas</label>
+                  <input type="text" id="hc-pat-infecto" placeholder="Varicela en la infancia, Dengue sin signos de alarma (2022)" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Enfermedades Crónicas / Alergias</label>
+                  <input type="text" id="hc-pat-cronicas" placeholder="Niega hipertensión, diabetes o alergias medicamentosas" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Cirugías Previas y Traumatismos</label>
+                  <input type="text" id="hc-pat-cirugias" placeholder="Niega intervenciones quirúrgicas" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Hospitalizaciones Previas</label>
+                  <input type="text" id="hc-pat-hosp" placeholder="Niega hospitalizaciones previas" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-xs">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN X: EXAMEN FÍSICO, ANTROPOMETRÍA Y BIOQUÍMICA CON EVALUACIÓN OMS EN TIEMPO REAL -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3 flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-sm font-bold uppercase tracking-wide">X. Examen Físico, Antropometría y Marcadores Bioquímicos (Evaluación OMS en Tiempo Real)</h3>
+            <span class="text-xs bg-[#FFD700] text-[#1B1464] font-bold px-2.5 py-0.5 rounded-full">Validación Clínica Activa</span>
+          </div>
+
+          <div class="p-5 space-y-6">
+            <!-- 1. Signos Vitales -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-[#D32F2F]"></i>
+                1. Signos Vitales (Estándares Clínicos OMS)
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Frec. Cardíaca (lpm) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal: 60 - 100 lpm</span>
+                  <input type="number" id="hc-fc" required placeholder="74" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-fc" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Frec. Respiratoria (rpm) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal: 12 - 20 rpm</span>
+                  <input type="number" id="hc-fr" required placeholder="16" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-fr" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">TA Sistólica (mmHg) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Óptima: &lt;120 | HTA: ≥140</span>
+                  <input type="number" id="hc-tas" required placeholder="115" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-ta" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando TA...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">TA Diastólica (mmHg) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Óptima: &lt;80 | HTA: ≥90</span>
+                  <input type="number" id="hc-tad" required placeholder="75" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div class="mt-1.5 text-[11px] text-slate-500">Evaluación conjunta con TAS</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Temperatura (°C) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal: 36.5 - 37.4 °C</span>
+                  <input type="number" step="0.1" id="hc-temp" required placeholder="36.8" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-temp" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Antropometría (Cálculo Automático IMC OMS y ASC Mosteller) -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                <i data-lucide="ruler" class="w-4 h-4 text-[#1B1464]"></i>
+                2. Somatometría / Antropometría (Cálculo Automático IMC OMS y ASC Mosteller)
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Peso Corporal (kg) *</label>
+                  <input type="number" step="0.1" id="hc-peso" required placeholder="68.5" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Talla / Estatura (m) *</label>
+                  <input type="number" step="0.01" id="hc-talla" required placeholder="1.70" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                </div>
+
+                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-200">
+                  <span class="block text-xs font-bold text-[#1B1464]">Índice de Masa Corporal (IMC)</span>
+                  <div class="flex items-baseline gap-2 mt-1">
+                    <span id="calc-imc" class="text-xl font-extrabold text-[#1B1464]">--</span>
+                    <span class="text-xs text-slate-600">kg/m²</span>
+                  </div>
+                  <div id="eval-imc" class="mt-1 text-[11px] font-semibold text-slate-500">Ingrese peso y talla</div>
+                </div>
+
+                <div class="bg-indigo-50/70 p-3 rounded-xl border border-indigo-200">
+                  <span class="block text-xs font-bold text-[#1B1464]">Área Superficie Corporal (Mosteller)</span>
+                  <div class="flex items-baseline gap-2 mt-1">
+                    <span id="calc-asc" class="text-xl font-extrabold text-[#1B1464]">--</span>
+                    <span class="text-xs text-slate-600">m²</span>
+                  </div>
+                  <span class="mt-1 block text-[10px] text-slate-500">√[(Talla cm × Peso kg) / 3600]</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Exploración Física Regional -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                <i data-lucide="stethoscope" class="w-4 h-4 text-[#1B1464]"></i>
+                3. Exploración Física Regional
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Aspecto General</label>
+                  <input type="text" id="hc-ef-general" value="Consciente, orientado, hidratado, biotipo normolíneo" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Piel y Mucosas</label>
+                  <input type="text" id="hc-ef-piel" value="Normocoloreadas, normohidratadas, sin lesiones" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Cabeza y Cuello</label>
+                  <input type="text" id="hc-ef-cabeza" value="Normocéfalo, cuello cilíndrico, tiroides no palpable" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Tórax (Cardiopulmonar)</label>
+                  <input type="text" id="hc-ef-torax" value="Simétrico, murmullo vesicular conservado, RCR sin soplos" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Abdomen y Pelvis</label>
+                  <input type="text" id="hc-ef-abdomen" value="Plano, blando, depresible, no doloroso, RHA presentes" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Tacto Rectal</label>
+                  <input type="text" id="hc-ef-rectal" value="Diferido / No indicado en chequeo preventivo" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Musculoesquelético</label>
+                  <input type="text" id="hc-ef-musculo" value="Extremidades simétricas, fuerza 5/5, arcos conservados" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+                <div>
+                  <label class="block font-semibold text-slate-700 mb-1">Genitourinario / Ginecológico</label>
+                  <input type="text" id="hc-ef-genito" value="Sin alteraciones aparentes / Puño percusión negativa" class="w-full rounded-lg border border-slate-300 px-3 py-1.5">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4. Marcadores Bioquímicos (Evaluación OMS en Tiempo Real) -->
+            <div>
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-3 flex items-center gap-2">
+                <i data-lucide="flask-conical" class="w-4 h-4 text-[#D32F2F]"></i>
+                4. Marcadores Bioquímicos Séricos (Evaluación OMS en Tiempo Real)
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Glucosa en Ayunas (mg/dL) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal OMS: 70 - 99 mg/dL</span>
+                  <input type="number" step="0.1" id="hc-glucosa" required placeholder="88" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-glucosa" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Colesterol Total (mg/dL) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Deseable: &lt;200 mg/dL</span>
+                  <input type="number" step="0.1" id="hc-colesterol" required placeholder="175" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-colesterol" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Triglicéridos (mg/dL) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal: &lt;150 mg/dL</span>
+                  <input type="number" step="0.1" id="hc-trigliceridos" required placeholder="118" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-trigliceridos" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+
+                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                  <label class="block text-xs font-bold text-slate-700">Proteínas Totales (g/dL) *</label>
+                  <span class="text-[10px] text-slate-500 block mb-1">Normal: 6.0 - 8.3 g/dL</span>
+                  <input type="number" step="0.1" id="hc-proteinas" required placeholder="7.2" oninput="updateLiveWHOEvaluation()" class="w-full rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold">
+                  <div id="eval-proteinas" class="mt-1.5 text-[11px] font-semibold text-slate-400">Esperando dato...</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5. Observaciones e Indicaciones Médicas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-200">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Observaciones Clínicas y Correlación Biomédica *</label>
+                <textarea id="hc-observaciones" rows="3" required placeholder="Análisis clínico integral, factores de riesgo identificados y correlación bioquímica-genética..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1">Indicaciones Médicas y Recomendaciones Preventivas *</label>
+                <textarea id="hc-indicaciones" rows="3" required placeholder="Plan nutricional, actividad física, control periódico de laboratorio y educación preventiva..." class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botón de Guardado -->
+          <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <p class="text-xs text-slate-600 flex items-center gap-1.5">
+              <i data-lucide="lock" class="w-4 h-4 text-[#1B1464]"></i>
+              Al guardar, los datos se anonimizan automáticamente para el Biobanco y se generan credenciales para el Portal del Paciente.
+            </p>
+            <button type="submit" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#1B1464] hover:bg-[#281F85] text-white font-bold text-sm rounded-xl shadow-md transition">
+              <i data-lucide="save" class="w-4 h-4 text-[#FFD700]"></i>
+              Guardar Historia Clínica y Registrar en Biobanco
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 3: BIOBANCO DIGITAL                                           -->
+    <!-- ===================================================================== -->
+    <section id="view-biobanco" class="hidden space-y-6">
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h2 class="text-base sm:text-lg font-bold flex items-center gap-2">
+              <i data-lucide="database" class="w-5 h-5 text-[#FFD700]"></i>
+              Repositorio Anonimizado del Biobanco Digital UNIJJAR
+            </h2>
+            <p class="text-xs text-indigo-200 mt-0.5">Registros codificados bajo protocolo de confidencialidad clínica con clasificación OMS.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="exportBiobancoCSV()" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-lg transition">
+              <i data-lucide="download" class="w-3.5 h-3.5 text-[#FFD700]"></i>
+              Exportar CSV
+            </button>
+            <span id="biobanco-count-badge" class="px-3 py-1 bg-[#FFD700] text-[#1B1464] text-xs font-extrabold rounded-full">
+              5 Muestras Digitales
+            </span>
+          </div>
+        </div>
+
+        <!-- Filtros y Buscador -->
+        <div class="p-4 bg-slate-50 border-b border-slate-200 flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-3"></i>
+            <input type="text" id="biobanco-search" oninput="renderBiobancoTable()" placeholder="Buscar por código (UNIJJAR-2026-...) o antecedente familiar..." class="w-full pl-10 pr-4 py-2 rounded-xl border border-slate-300 text-sm bg-white focus:ring-2 focus:ring-[#1B1464]">
+          </div>
+          <div class="sm:w-64">
+            <select id="biobanco-filter-imc" onchange="renderBiobancoTable()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm bg-white font-medium text-slate-700">
+              <option value="ALL">Todas las categorías IMC (OMS)</option>
+              <option value="Bajo peso">Bajo peso (&lt;18.5)</option>
+              <option value="Normal">Normal (18.5 - 24.9)</option>
+              <option value="Sobrepeso">Sobrepeso (25.0 - 29.9)</option>
+              <option value="Obesidad">Obesidad (≥30.0)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabla Responsiva del Biobanco -->
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                <th class="py-3.5 px-4">Código Biobanco</th>
+                <th class="py-3.5 px-4">Sexo / Edad</th>
+                <th class="py-3.5 px-4">Antecedente Familiar y Respaldo</th>
+                <th class="py-3.5 px-4">Somatometría e IMC (OMS)</th>
+                <th class="py-3.5 px-4">Marcadores Bioquímicos (OMS)</th>
+                <th class="py-3.5 px-4 text-right">Ficha Clínica</th>
+              </tr>
+            </thead>
+            <tbody id="biobanco-tbody" class="divide-y divide-slate-200 text-xs sm:text-sm">
+              <!-- Renderizado dinámico -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 4: PORTAL DEL PACIENTE                                        -->
+    <!-- ===================================================================== -->
+    <section id="view-paciente" class="hidden space-y-6">
+      <!-- VISTA DE INICIO DE SESIÓN DEL PACIENTE -->
+      <div id="patient-login-box" class="max-w-xl mx-auto bg-white rounded-xl shadow-md border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-6 py-5 text-center border-b-4 border-[#FFD700]">
+          <div class="w-12 h-12 bg-white/15 rounded-full flex items-center justify-center mx-auto mb-2">
+            <i data-lucide="user-check" class="w-6 h-6 text-[#FFD700]"></i>
+          </div>
+          <h2 class="text-lg font-bold">Portal de Consulta del Paciente</h2>
+          <p class="text-xs text-indigo-200 mt-1">Acceso confidencial a resultados biomédicos, rangos OMS e indicaciones médicas</p>
+        </div>
+
+        <form onsubmit="handlePatientLogin(event)" class="p-6 space-y-4">
+          <div id="patient-login-error" class="hidden bg-red-50 border border-red-200 text-[#D32F2F] text-xs font-semibold p-3 rounded-lg">
+            Usuario o contraseña incorrectos. Verifique sus credenciales entregadas en consulta.
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Usuario del Paciente</label>
+            <input type="text" id="patient-username" required placeholder="Ej. pac.ana.martinez" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Contraseña</label>
+            <input type="password" id="patient-password" required placeholder="••••••••" class="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm">
+          </div>
+
+          <button type="submit" class="w-full py-3 bg-[#1B1464] hover:bg-[#281F85] text-white font-bold text-sm rounded-xl shadow transition flex items-center justify-center gap-2">
+            <i data-lucide="log-in" class="w-4 h-4 text-[#FFD700]"></i>
+            Ingresar a mi Expediente Biomédico
+          </button>
+
+          <!-- Accesos rápidos de demostración -->
+          <div class="pt-4 border-t border-slate-200">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-2">
+              Accesos Rápidos de Demostración Académica:
+            </p>
+            <div id="patient-demo-buttons" class="flex flex-wrap gap-2">
+              <!-- Botones generados por JS -->
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- VISTA PRIVADA DEL PACIENTE AUTENTICADO (Diseño Clásico Limpio en Tarjetas) -->
+      <div id="patient-dashboard-box" class="hidden space-y-6">
+        <!-- Encabezado con datos del expediente -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[#FFD700]">Resumen Clínico Personalizado</span>
+              <h2 id="pat-view-nombre" class="text-xl font-extrabold mt-0.5">Nombre del Paciente</h2>
+              <p id="pat-view-meta" class="text-xs text-indigo-200 mt-0.5">Expediente MINSA-2026-001 • Código Biobanco: UNIJJAR-2026-001</p>
+            </div>
+            <div class="flex flex-wrap gap-2 no-print">
+              <button onclick="window.print()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white/15 hover:bg-white/25 text-white text-xs font-semibold rounded-lg transition">
+                <i data-lucide="printer" class="w-4 h-4"></i>
+                Imprimir Resumen
+              </button>
+              <button onclick="logoutPatient()" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#D32F2F] hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition">
+                <i data-lucide="log-out" class="w-4 h-4"></i>
+                Cerrar Sesión
+              </button>
+            </div>
+          </div>
+          <div class="p-4 bg-slate-50 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs border-t border-slate-200">
+            <div>
+              <span class="text-slate-500 block">Edad / Sexo</span>
+              <span id="pat-view-edad-sexo" class="font-bold text-slate-800">--</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Fecha de Evaluación</span>
+              <span id="pat-view-fecha" class="font-bold text-slate-800">--</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Establecimiento</span>
+              <span id="pat-view-establecimiento" class="font-bold text-slate-800">--</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Usuario Portal</span>
+              <span id="pat-view-user" class="font-mono font-bold text-[#1B1464]">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjetas de Signos Vitales/Antropometría y Resultados Bioquímicos -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Tarjeta Signos Vitales y Antropometría -->
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-[#1B1464] text-white px-5 py-3 flex items-center gap-2">
+              <i data-lucide="heart-pulse" class="w-4 h-4 text-[#FFD700]"></i>
+              <h3 class="text-sm font-bold uppercase tracking-wide">Signos Vitales y Antropometría (Rangos OMS)</h3>
+            </div>
+            <div class="p-5 divide-y divide-slate-100 text-sm" id="pat-view-vitales">
+              <!-- Renderizado dinámico -->
+            </div>
+          </div>
+
+          <!-- Tarjeta Resultados Bioquímicos -->
+          <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="bg-[#1B1464] text-white px-5 py-3 flex items-center gap-2">
+              <i data-lucide="flask-conical" class="w-4 h-4 text-[#FFD700]"></i>
+              <h3 class="text-sm font-bold uppercase tracking-wide">Resultados Bioquímicos Séricos (Rangos OMS)</h3>
+            </div>
+            <div class="p-5 divide-y divide-slate-100 text-sm" id="pat-view-bioquimica">
+              <!-- Renderizado dinámico -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta Destacada de Observaciones e Indicaciones del Médico -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3 flex items-center gap-2">
+            <i data-lucide="clipboard-check" class="w-4 h-4 text-[#FFD700]"></i>
+            <h3 class="text-sm font-bold uppercase tracking-wide">Observaciones Clínicas e Indicaciones Médicas</h3>
+          </div>
+          <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-[#1B1464] mb-1.5">Valoración Clínica Integral</h4>
+              <p id="pat-view-observaciones" class="text-sm text-slate-700 leading-relaxed">--</p>
+            </div>
+            <div class="bg-emerald-50/70 rounded-xl p-4 border border-emerald-200">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-800 mb-1.5">Indicaciones y Plan Preventivo</h4>
+              <p id="pat-view-indicaciones" class="text-sm text-slate-800 leading-relaxed">--</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- PESTAÑA 5: BIOESTADÍSTICA Y CIENCIAS BÁSICAS                          -->
+    <!-- ===================================================================== -->
+    <section id="view-bioestadistica" class="hidden space-y-6">
+      <!-- 1. Tablas de Bioestadística Descriptiva en Tiempo Real -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Variables Cuantitativas -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3.5 flex items-center justify-between">
+            <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+              <i data-lucide="sigma" class="w-4 h-4 text-[#FFD700]"></i>
+              Estadística Descriptiva: Variables Biomédicas Cuantitativas
+            </h3>
+            <span class="text-xs text-indigo-200">Actualización automática</span>
+          </div>
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase">
+                  <th class="py-3 px-3">Variable (Unidad)</th>
+                  <th class="py-3 px-2 text-center">N</th>
+                  <th class="py-3 px-2 text-right">Media</th>
+                  <th class="py-3 px-2 text-right">Mediana</th>
+                  <th class="py-3 px-2 text-right">DE (s)</th>
+                  <th class="py-3 px-2 text-right">Mín</th>
+                  <th class="py-3 px-2 text-right">Máx</th>
+                  <th class="py-3 px-3 text-right">Rango</th>
+                </tr>
+              </thead>
+              <tbody id="stats-quant-tbody" class="divide-y divide-slate-200">
+                <!-- Generado dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Variables Cualitativas -->
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3.5">
+            <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-[#FFD700]"></i>
+              Frecuencias Cualitativas (n / %)
+            </h3>
+          </div>
+          <div class="p-4 space-y-4 text-xs" id="stats-qual-container">
+            <!-- Generado dinámicamente -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Gráficos Interactivos Chart.js -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold">Distribución de Estado Nutricional (IMC según OMS)</h3>
+          </div>
+          <div class="p-5 h-72 relative">
+            <canvas id="chart-imc"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold">Promedios Bioquímicos de la Cohorte vs. Límite Superior Normal OMS</h3>
+          </div>
+          <div class="p-5 h-72 relative">
+            <canvas id="chart-bioquimica"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Tabla Guía de Valores de Referencia OMS -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-5 py-3.5 flex items-center justify-between">
+          <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+            <i data-lucide="book-open-check" class="w-4 h-4 text-[#FFD700]"></i>
+            Tabla Guía de Valores de Referencia Normales y No Normales (OMS y Estándares Clínicos)
+          </h3>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase">
+                <th class="py-3 px-4">Parámetro Biomédico</th>
+                <th class="py-3 px-4">Rango Normal / Óptimo (OMS)</th>
+                <th class="py-3 px-4">Rango Limítrofe / Alterado</th>
+                <th class="py-3 px-4">Rango Patológico / Alto Riesgo</th>
+                <th class="py-3 px-4">Relevancia Fisiopatológica</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Frecuencia Cardíaca (FC)</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">60 - 100 lpm (Normocardia)</td>
+                <td class="py-2.5 px-4 text-amber-700">50-59 o 101-110 lpm (Variación fisiológica)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">&lt;60 lpm (Bradicardia) / &gt;100 lpm (Taquicardia)</td>
+                <td class="py-2.5 px-4 text-slate-600">Automatismo del nodo sinusal y gasto cardíaco.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Frecuencia Respiratoria (FR)</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">12 - 20 rpm (Eupnea)</td>
+                <td class="py-2.5 px-4 text-amber-700">21 - 24 rpm (Taquipnea leve)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">&lt;12 rpm (Bradipnea) / &gt;20 rpm (Taquipnea)</td>
+                <td class="py-2.5 px-4 text-slate-600">Ventilación alveolar y equilibrio ácido-base.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Tensión Arterial (TA)</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">&lt;120 / &lt;80 mmHg (Óptima) • 120-129 / 80-84 (Normal)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">130-139 / 85-89 mmHg (Normal Alta / Pre-HTA)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥140 / ≥90 mmHg (Hipertensión Arterial OMS) • &lt;90/60 (Hipotensión)</td>
+                <td class="py-2.5 px-4 text-slate-600">Resistencia vascular periférica y riesgo cardiovascular.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Temperatura Corporal (T°)</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">36.5 - 37.4 °C (Normotermia)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">37.5 - 37.9 °C (Febrícula) / 36.0-36.4 °C</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥38.0 °C (Fiebre) / &lt;36.0 °C (Hipotermia)</td>
+                <td class="py-2.5 px-4 text-slate-600">Termorregulación hipotalámica y respuesta inflamatoria.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Índice de Masa Corporal (IMC)</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">18.5 - 24.9 kg/m² (Normopeso OMS)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">25.0 - 29.9 kg/m² (Sobrepeso) • &lt;18.5 (Bajo peso)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥30.0 kg/m² (Obesidad Grado I, II y III OMS)</td>
+                <td class="py-2.5 px-4 text-slate-600">Adiposidad corporal y riesgo cardiometabólico.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Glucosa en Ayunas</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">70 - 99 mg/dL (Normoglucemia OMS)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">100 - 125 mg/dL (Glucosa Alterada en Ayunas / Prediabetes)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥126 mg/dL (Hiperglucemia / Criterio Diabetes OMS) • &lt;70 (Hipoglucemia)</td>
+                <td class="py-2.5 px-4 text-slate-600">Homeostasis insulínica y metabolismo de carbohidratos.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Colesterol Total</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">&lt;200 mg/dL (Deseable)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">200 - 239 mg/dL (Limítrofe Alto)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥240 mg/dL (Hipercolesterolemia Alta)</td>
+                <td class="py-2.5 px-4 text-slate-600">Síntesis de membranas, esteroides y aterogénesis.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Triglicéridos</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">&lt;150 mg/dL (Normal)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">150 - 199 mg/dL (Limítrofe Alto)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">≥200 mg/dL (Hipertrigliceridemia Alta)</td>
+                <td class="py-2.5 px-4 text-slate-600">Transporte lipídico en VLDL y resistencia a la insulina.</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Proteínas Totales</td>
+                <td class="py-2.5 px-4 text-emerald-700 font-semibold">6.0 - 8.3 g/dL (Normoproteinemia)</td>
+                <td class="py-2.5 px-4 text-amber-700 font-semibold">5.5 - 5.9 o 8.4 - 8.8 g/dL (Variación leve)</td>
+                <td class="py-2.5 px-4 text-[#D32F2F] font-semibold">&lt;6.0 g/dL (Hipoproteinemia) / &gt;8.3 g/dL (Hiperproteinemia)</td>
+                <td class="py-2.5 px-4 text-slate-600">Presión oncótica plasmática (albúmina y globulinas).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4. Explorador Interactivo de las 7 Asignaturas del Semestre -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-5 py-3.5">
+          <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-[#FFD700]"></i>
+            Integración Curricular: 7 Asignaturas del II Semestre de Medicina (UNIJJAR)
+          </h3>
+        </div>
+        <div class="p-5">
+          <div id="subjects-tabs" class="flex flex-wrap gap-2 mb-4">
+            <!-- Botones de las 7 asignaturas generados por JS -->
+          </div>
+          <div id="subject-detail-card" class="bg-slate-50 rounded-xl p-5 border border-slate-200">
+            <!-- Detalle de la asignatura activa -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Matriz de Operacionalización de Variables (Sección 5.6) -->
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-[#1B1464] text-white px-5 py-3.5">
+          <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+            <i data-lucide="table-2" class="w-4 h-4 text-[#FFD700]"></i>
+            Matriz de Operacionalización de Variables (Sección 5.6 del Protocolo)
+          </h3>
+        </div>
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 font-bold text-slate-700 uppercase">
+                <th class="py-3 px-4">Variable</th>
+                <th class="py-3 px-4">Definición Conceptual</th>
+                <th class="py-3 px-4">Tipo y Escala</th>
+                <th class="py-3 px-4">Indicador / Unidad</th>
+                <th class="py-3 px-4">Categorías / Valores Finales</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Edad</td>
+                <td class="py-2.5 px-4 text-slate-600">Tiempo transcurrido desde el nacimiento hasta la captura clínica.</td>
+                <td class="py-2.5 px-4">Cuantitativa discreta (Razón)</td>
+                <td class="py-2.5 px-4">Años cumplidos</td>
+                <td class="py-2.5 px-4">18 a 110 años</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Sexo Biológico</td>
+                <td class="py-2.5 px-4 text-slate-600">Condición orgánica fenotípica consignada en el expediente MINSA.</td>
+                <td class="py-2.5 px-4">Cualitativa dicotómica (Nominal)</td>
+                <td class="py-2.5 px-4">Frecuencia absoluta y %</td>
+                <td class="py-2.5 px-4">Femenino / Masculino</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Índice de Masa Corporal (IMC)</td>
+                <td class="py-2.5 px-4 text-slate-600">Relación antropométrica entre peso corporal y talla al cuadrado.</td>
+                <td class="py-2.5 px-4">Cuantitativa continua / Ordinal OMS</td>
+                <td class="py-2.5 px-4">kg/m²</td>
+                <td class="py-2.5 px-4">Bajo peso (&lt;18.5), Normal (18.5-24.9), Sobrepeso (25-29.9), Obesidad (≥30)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Tensión Arterial (TAS/TAD)</td>
+                <td class="py-2.5 px-4 text-slate-600">Fuerza ejercida por la sangre contra las paredes arteriales.</td>
+                <td class="py-2.5 px-4">Cuantitativa continua / Ordinal OMS</td>
+                <td class="py-2.5 px-4">mmHg</td>
+                <td class="py-2.5 px-4">Óptima (&lt;120/80), Normal (120-129/80-84), Normal alta (130-139/85-89), HTA (≥140/90)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Glucemia Basal</td>
+                <td class="py-2.5 px-4 text-slate-600">Concentración de glucosa en plasma tras ayuno de 8 horas.</td>
+                <td class="py-2.5 px-4">Cuantitativa continua / Ordinal OMS</td>
+                <td class="py-2.5 px-4">mg/dL</td>
+                <td class="py-2.5 px-4">Normal (70-99), Glucosa alterada en ayunas (100-125), Hiperglucemia (≥126)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Perfil Lipídico (Colesterol / TG)</td>
+                <td class="py-2.5 px-4 text-slate-600">Concentración sérica de colesterol total y triglicéridos.</td>
+                <td class="py-2.5 px-4">Cuantitativa continua / Ordinal</td>
+                <td class="py-2.5 px-4">mg/dL</td>
+                <td class="py-2.5 px-4">Colesterol: &lt;200 deseable, 200-239 limítrofe, ≥240 alto; TG: &lt;150 normal, ≥200 alto</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 px-4 font-bold text-slate-800">Antecedente Heredofamiliar</td>
+                <td class="py-2.5 px-4 text-slate-600">Presencia de patologías hereditarias o infectocontagiosas en familiares.</td>
+                <td class="py-2.5 px-4">Cualitativa politómica (Nominal)</td>
+                <td class="py-2.5 px-4">Tipo y respaldo</td>
+                <td class="py-2.5 px-4">Declarado en anamnesis vs. Prueba genética documentada</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 6. Protocolos Éticos y Referencias APA 7.ª Edición -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-4 h-4 text-[#FFD700]"></i>
+              Protocolos Éticos y Gobernanza de Datos
+            </h3>
+          </div>
+          <div class="p-5 space-y-2.5 text-xs text-slate-700 leading-relaxed">
+            <p><strong>1. Declaración de Helsinki y Pautas CIOMS:</strong> Respeto irrestricto a la autonomía, beneficencia, no maleficencia y justicia en la investigación biomédica educativa.</p>
+            <p><strong>2. Anonimización Irreversible en Capa Pública:</strong> Separación estricta entre los datos nominativos de la Historia Clínica MINSA y el código alfanumérico del Biobanco (<code class="bg-slate-100 px-1 rounded">UNIJJAR-2026-XXX</code>).</p>
+            <p><strong>3. Ley N.º 423 (Ley General de Salud de Nicaragua) y Normativa 004 MINSA:</strong> Cumplimiento de los estándares nacionales para el manejo y custodia del expediente clínico.</p>
+            <p><strong>4. Alcance No Diagnóstico:</strong> Las alertas basadas en umbrales OMS tienen propósito de apoyo pedagógico y tamizaje preventivo supervisado por docentes médicos.</p>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="bg-[#1B1464] text-white px-5 py-3">
+            <h3 class="text-sm font-bold uppercase tracking-wide flex items-center gap-2">
+              <i data-lucide="library" class="w-4 h-4 text-[#FFD700]"></i>
+              Referencias Bibliográficas (Normas APA 7.ª Edición)
+            </h3>
+          </div>
+          <div class="p-5 space-y-2.5 text-xs text-slate-700 leading-relaxed">
+            <p class="pl-5 -indent-5">Ministerio de Salud de Nicaragua [MINSA]. (2013). <em>Normativa 004: Norma Técnica para el Manejo del Expediente Clínico</em>. Dirección General de Regulación Sanitaria.</p>
+            <p class="pl-5 -indent-5">Organización Mundial de la Salud [OMS]. (2020). <em>Directrices de la OMS sobre actividad física y hábitos sedentarios y parámetros de referencia cardiometabólicos</em>. Ginebra: OMS.</p>
+            <p class="pl-5 -indent-5">Organización Mundial de la Salud [OMS]. (2023). <em>Obesidad y sobrepeso: Clasificación del Índice de Masa Corporal en adultos</em>. Centro de Prensa de la OMS.</p>
+            <p class="pl-5 -indent-5">Vaught, J., &amp; Lockhart, N. C. (2012). The evolution of biobanking best practices. <em>Clinica Chimica Acta</em>, 413(19-20), 1569–1575. https://doi.org/10.1016/j.cca.2012.04.030</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER INSTITUCIONAL -->
+  <footer class="bg-[#1B1464] text-white border-t-4 border-[#FFD700] mt-10 no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs">
+      <div>
+        <p class="font-bold text-[#FFD700]">Universidad Jean-Jacques Rousseau (UNIJJAR) • Managua, Nicaragua</p>
+        <p class="text-indigo-200 mt-0.5">Facultad de Ciencias Médicas • II Semestre 2026 • Lema: “Éxito - Tecnología - Sabiduría”</p>
+      </div>
+      <div class="text-center md:text-right text-indigo-100">
+        <p><span class="font-semibold text-white">Autora:</span> Navarro Ruiz Jekseling Alicia (26-00051)</p>
+        <p class="mt-0.5"><span class="font-semibold text-white">Asesor Metodológico y Clínico:</span> Msc. Bayardo González</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL 1: FICHA BIOMÉDICA INTEGRADA (DISEÑO CLÁSICO EN TARJETAS LIMPIAS) -->
+  <!-- ======================================================================= -->
+  <div id="biobank-detail-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden border border-slate-200 my-8">
+      <!-- Encabezado Modal -->
+      <div class="bg-[#1B1464] text-white px-6 py-4 flex items-center justify-between border-b-4 border-[#FFD700]">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-[#FFD700]">Ficha Biomédica Integrada • Biobanco UNIJJAR</span>
+          <h3 id="modal-code-title" class="text-lg sm:text-xl font-extrabold mt-0.5">UNIJJAR-2026-001</h3>
+        </div>
+        <button onclick="closeDetailModal()" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition" aria-label="Cerrar ficha">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Cuerpo estructurado en tarjetas ordenadas por sección -->
+      <div id="modal-detail-body" class="p-6 space-y-5 max-h-[78vh] overflow-y-auto custom-scrollbar bg-slate-50">
+        <!-- Contenido dinámico -->
+      </div>
+
+      <!-- Pie Modal -->
+      <div class="bg-white px-6 py-3.5 border-t border-slate-200 flex justify-end">
+        <button onclick="closeDetailModal()" class="px-5 py-2 bg-[#1B1464] hover:bg-[#281F85] text-white text-xs font-bold rounded-xl transition">
+          Cerrar Ficha Biomédica
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- MODAL 2: CONFIRMACIÓN DE REGISTRO Y CREDENCIALES DEL PACIENTE           -->
+  <!-- ======================================================================= -->
+  <div id="credentials-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden border border-slate-200">
+      <div class="bg-[#1B1464] text-white px-6 py-4 border-b-4 border-[#FFD700] flex items-center gap-3">
+        <div class="p-2 bg-emerald-500/20 text-[#FFD700] rounded-xl">
+          <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold">Historia Clínica Guardada</h3>
+          <p class="text-xs text-indigo-200">Registro anonimizado añadido al Biobanco</p>
+        </div>
+      </div>
+
+      <div class="p-6 space-y-4">
+        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+          Se ha generado el código de Biobanco <strong id="cred-biobank-code" class="text-[#1B1464] font-mono">UNIJJAR-2026-006</strong> y las credenciales únicas para que el paciente consulte sus resultados:
+        </p>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 space-y-2 text-xs">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Paciente:</span>
+            <span id="cred-patient-name" class="font-bold text-slate-800">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Expediente MINSA:</span>
+            <span id="cred-exp-num" class="font-mono font-bold text-slate-800">--</span>
+          </div>
+          <div class="flex justify-between pt-2 border-t border-slate-200">
+            <span class="text-slate-500">Usuario Portal:</span>
+            <span id="cred-username" class="font-mono font-bold text-[#1B1464]">--</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Contraseña:</span>
+            <span id="cred-password" class="font-mono font-bold text-[#D32F2F]">MINSA2026</span>
+          </div>
+        </div>
+
+        <div id="copy-feedback" class="hidden text-center text-xs font-semibold text-emerald-700 bg-emerald-50 py-1.5 rounded-lg">
+          ¡Credenciales copiadas al portapapeles!
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-2 pt-2">
+          <button type="button" onclick="copyGeneratedCredentials()" class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition">
+            <i data-lucide="copy" class="w-4 h-4"></i>
+            Copiar Credenciales
+          </button>
+          <button type="button" onclick="openPortalWithNewCredentials()" class="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-[#1B1464] hover:bg-[#281F85] text-white text-xs font-bold rounded-xl transition">
+            <i data-lucide="external-link" class="w-4 h-4 text-[#FFD700]"></i>
+            Abrir Portal del Paciente
+          </button>
+        </div>
+        <button type="button" onclick="closeCredentialsModal()" class="w-full py-2 text-xs font-semibold text-slate-500 hover:text-slate-700">
+          Cerrar ventana
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================= -->
+  <!-- LÓGICA DE APLICACIÓN, EVALUACIÓN OMS Y BIOESTADÍSTICA                   -->
+  <!-- ======================================================================= -->
+  <script>
+    // Respaldo seguro para iconos Lucide (evita bloqueo si el CDN tarda o no carga)
+    function safeCreateIcons() {
+      try {
+        if (typeof lucide !== 'undefined' && typeof lucide.createIcons === 'function') {
+          lucide.createIcons();
+        }
+      } catch (err) {
+        console.warn('Iconos Lucide no disponibles temporalmente:', err);
+      }
+    }
+
+    // Almacenamiento seguro con try/catch y respaldo automático en memoria (window._safeStore)
+    window._safeStore = {};
+    const safeStorage = {
+      getItem(key) {
+        try {
+          return window.localStorage.getItem(key);
+        } catch (e) {
+          return Object.prototype.hasOwnProperty.call(window._safeStore, key) ? window._safeStore[key] : null;
+        }
+      },
+      setItem(key, value) {
+        window._safeStore[key] = String(value);
+        try {
+          window.localStorage.setItem(key, String(value));
+        } catch (e) {
+          // Respaldo en memoria activo si localStorage está bloqueado por el navegador/visor
+        }
+      }
+    };
+
+    const STORAGE_KEY = 'unijjar_biobanco_records_2026_v1';
+
+    // Listas oficiales Normativa 004 MINSA para Antecedentes Familiares
+    const INFECTO_LIST = [
+      'Hepatitis', 'Sífilis', 'Tuberculosis (TB)', 'Cólera', 'Amebiasis',
+      'Tosferina', 'Sarampión', 'Varicela', 'Rubéola', 'Parotiditis',
+      'Meningitis', 'Impétigo', 'Fiebre tifoidea', 'Escarlatina', 'Malaria',
+      'Escabiosis', 'Pediculosis', 'Tiña', 'Otros infecto-contagiosos'
+    ];
+
+    const HEREDITARIAS_LIST = [
+      'Alergias', 'Diabetes mellitus', 'Hipertensión arterial', 'Enfermedad reumática',
+      'Enfermedades renales', 'Enfermedades oculares', 'Enfermedades cardíacas',
+      'Enfermedad hepática', 'Enfermedades musculares', 'Malformaciones congénitas',
+      'Desórdenes mentales', 'Degenerativas del SNC', 'Anomalías del crecimiento',
+      'Errores innatos del metabolismo', 'Otros hereditarios'
+    ];
+
+    // 6 Objetivos Específicos del Protocolo UNIJJAR 2026
+    const OBJETIVOS_ESPECIFICOS = [
+      {
+        num: 'OE-1',
+        titulo: 'Caracterización Sociodemográfica y Clínica',
+        descripcion: 'Identificar el perfil sociodemográfico, antropométrico y los antecedentes heredofamiliares de los participantes mediante la Historia Clínica del Adulto (Normativa 004 MINSA).',
+        tecnica: 'Entrevista clínica estructurada y somatométrica estandarizada.',
+        producto: 'Base de datos clínica normalizada bajo estándares MINSA.'
+      },
+      {
+        num: 'OE-2',
+        titulo: 'Arquitectura Digital Anonimizada',
+        descripcion: 'Diseñar la arquitectura lógica del Biobanco Digital garantizando la disociación entre datos nominativos del paciente y su código biomédico universitario.',
+        tecnica: 'Modelado relacional y codificación alfanumérica UNIJJAR-2026-XXX.',
+        producto: 'Repositorio digital seguro sin almacenamiento físico de tejidos.'
+      },
+      {
+        num: 'OE-3',
+        titulo: 'Evaluación Biométrica y Bioquímica OMS',
+        descripcion: 'Automatizar la clasificación de signos vitales, IMC, superficie corporal (Mosteller) y marcadores séricos conforme a los puntos de corte oficiales de la OMS.',
+        tecnica: 'Algoritmos de validación clínica en tiempo real.',
+        producto: 'Semáforo clínico preventivo y alertas tempranas de riesgo metabólico.'
+      },
+      {
+        num: 'OE-4',
+        titulo: 'Interoperabilidad con Portal del Paciente',
+        descripcion: 'Habilitar un canal de retorno de información clínica comprensible para el usuario mediante credenciales individuales generadas en consulta.',
+        tecnica: 'Autenticación por expediente y visualización centrada en el paciente.',
+        producto: 'Portal del Paciente con resumen imprimible e indicaciones médicas.'
+      },
+      {
+        num: 'OE-5',
+        titulo: 'Análisis Bioestadístico Descriptivo',
+        descripcion: 'Procesar indicadores de tendencia central, dispersión y frecuencias relativas de la cohorte para fundamentar el aprendizaje cuantitativo en Medicina.',
+        tecnica: 'Estadística descriptiva paramétrica/no paramétrica y visualización gráfica.',
+        producto: 'Tablero bioestadístico dinámico y gráficos epidemiológicos.'
+      },
+      {
+        num: 'OE-6',
+        titulo: 'Integración Curricular de Ciencias Básicas',
+        descripcion: 'Articular los hallazgos del biobanco con las 7 asignaturas del II semestre (Genética, Anatomía, Bioquímica, Bioestadística, Informática, Redacción e Historia).',
+        tecnica: 'Aprendizaje basado en casos reales anonimizados (ABC).',
+        producto: 'Guías de correlación clínico-básica UNIJJAR 2026.'
+      }
+    ];
+
+    // 7 Asignaturas del II Semestre de Medicina UNIJJAR
+    const ASIGNATURAS_SEMESTRE = [
+      {
+        id: 'genetica',
+        nombre: 'Genética Médica',
+        enfoque: 'Herencia multifactorial, genealogía clínica y predisposición genética.',
+        aplicacion: 'Diferenciación entre antecedentes familiares declarados en anamnesis y variantes confirmadas mediante pruebas moleculares; análisis de agregación familiar en Diabetes Mellitus tipo 2 e Hipertensión Arterial.'
+      },
+      {
+        id: 'anatomia',
+        nombre: 'Anatomía Humana',
+        enfoque: 'Anatomía de superficie, topografía regional y somatometría.',
+        aplicacion: 'Correlación entre biotipo constitucional, distribución de tejido adiposo (IMC), cálculo del Área de Superficie Corporal (fórmula de Mosteller) y exploración sistematizada por regiones anatómicas.'
+      },
+      {
+        id: 'bioquimica',
+        nombre: 'Bioquímica Médica',
+        enfoque: 'Metabolismo intermediario de glúcidos, lípidos y proteínas plasmáticas.',
+        aplicacion: 'Interpretación fisiopatológica de la glucemia basal (glucólisis/gluconeogénesis), perfil lipídico (lipoproteínas VLDL/LDL/HDL) y proteinemia total según rangos OMS.'
+      },
+      {
+        id: 'bioestadistica',
+        nombre: 'Bioestadística',
+        enfoque: 'Estadística descriptiva, escalas de medición y representación gráfica.',
+        aplicacion: 'Cálculo automatizado de media aritmética, mediana, desviación estándar, rango y distribución de frecuencias sobre variables reales de la cohorte estudiantil.'
+      },
+      {
+        id: 'informatica',
+        nombre: 'Informática Médica',
+        enfoque: 'Sistemas de información en salud, interoperabilidad y seguridad de datos.',
+        aplicacion: 'Implementación de la Historia Clínica Electrónica basada en la Normativa 004 MINSA, anonimización de datos biomédicos y control de acceso por roles (Médico / Paciente).'
+      },
+      {
+        id: 'redaccion',
+        nombre: 'Redacción Médica',
+        enfoque: 'Semiología escrita, terminología clínica y comunicación científica.',
+        aplicacion: 'Estructuración rigurosa de la Historia de la Enfermedad Actual, notas de evolución, indicaciones comprensibles para el paciente y citación bajo normas APA 7.ª edición.'
+      },
+      {
+        id: 'historia',
+        nombre: 'Historia de Nicaragua e Identidad Nacional',
+        enfoque: 'Evolución del sistema de salud nicaragüense y determinantes sociales.',
+        aplicacion: 'Contextualización histórica del Modelo de Salud Familiar y Comunitario (MOSAFC), el rol normativo del MINSA y el compromiso ético del médico formado en UNIJJAR con la población nicaragüense.'
+      }
+    ];
+
+    // 5 Registros Base Precargados (UNIJJAR-2026-001 a 005)
+    let biobankRecords = [
+      {
+        biobankCode: 'UNIJJAR-2026-001',
+        expediente: 'MINSA-2026-001',
+        nombre: 'Ana Sofía Martínez López',
+        cedula: '001-120503-1018F',
+        edad: 23,
+        sexo: 'Femenino',
+        procedencia: 'Urbana',
+        establecimiento: 'Clínica Docente UNIJJAR / SILAIS Managua',
+        fecha: '2026-09-14',
+        hora: '08:30',
+        inss: '2849102-4',
+        servicio: 'Consulta Externa - Medicina Interna',
+        cama: 'Consultorio 01',
+        motivo: 'Control preventivo universitario y tamizaje metabólico',
+        hea: 'Paciente femenina de 23 años, asintomática, acude para evaluación biomédica integral del II semestre.',
+        antecedentesInfecto: ['Varicela'],
+        antecedentesHereditarios: ['Diabetes mellitus', 'Hipertensión arterial'],
+        respaldoGenetico: 'Declarado en Anamnesis',
+        detalleFamiliar: 'Madre con Diabetes Mellitus tipo 2 diagnosticada a los 48 años; abuelo materno con HTA.',
+        fc: 72, fr: 16, tas: 112, tad: 74, temp: 36.7,
+        peso: 58.0, talla: 1.62,
+        glucosa: 86, colesterol: 168, trigliceridos: 105, proteinas: 7.3,
+        observaciones: 'Paciente normopeso, normotensa y con perfil glucémico y lipídico dentro de rangos óptimos OMS. Presenta carga familiar cardiometabólica materna que amerita vigilancia preventiva.',
+        indicaciones: 'Mantener alimentación balanceada rica en fibra, actividad física aeróbica 150 min/semana y control anual de glucemia basal y perfil lipídico.',
+        username: 'pac.ana.martinez',
+        password: 'MINSA2026'
+      },
+      {
+        biobankCode: 'UNIJJAR-2026-002',
+        expediente: 'MINSA-2026-002',
+        nombre: 'José Daniel Morales Castro',
+        cedula: '001-240801-1045M',
+        edad: 25,
+        sexo: 'Masculino',
+        procedencia: 'Urbana',
+        establecimiento: 'Clínica Docente UNIJJAR / SILAIS Managua',
+        fecha: '2026-09-15',
+        hora: '09:15',
+        inss: '2710493-8',
+        servicio: 'Consulta Externa - Medicina Interna',
+        cama: 'Consultorio 02',
+        motivo: 'Evaluación nutricional y control de peso',
+        hea: 'Paciente masculino de 25 años que refiere sedentarismo asociado a carga académica nocturna y aumento ponderal de 5 kg en el último año.',
+        antecedentesInfecto: ['Amebiasis'],
+        antecedentesHereditarios: ['Hipertensión arterial', 'Enfermedades cardíacas'],
+        respaldoGenetico: 'Prueba Genética Documentada',
+        detalleFamiliar: 'Padre con HTA esencial y dislipidemia familiar confirmada por panel genético (polimorfismo APOE).',
+        fc: 80, fr: 18, tas: 132, tad: 85, temp: 36.9,
+        peso: 84.5, talla: 1.75,
+        glucosa: 104, colesterol: 214, trigliceridos: 168, proteinas: 7.5,
+        observaciones: 'Sobrepeso grado I según OMS (IMC 27.6 kg/m²), tensión arterial normal-alta, glucosa alterada en ayunas (104 mg/dL) y dislipidemia limítrofe.',
+        indicaciones: 'Plan nutricional hipocalórico reducido en azúcares simples y grasas saturadas, caminata rápida 40 min diarios, higiene del sueño y reevaluación bioquímica en 3 meses.',
+        username: 'pac.jose.morales',
+        password: 'MINSA2026'
+      },
+      {
+        biobankCode: 'UNIJJAR-2026-003',
+        expediente: 'MINSA-2026-003',
+        nombre: 'Valeria Fernanda Gómez Ruiz',
+        cedula: '201-051103-0012F',
+        edad: 22,
+        sexo: 'Femenino',
+        procedencia: 'Rural',
+        establecimiento: 'Clínica Docente UNIJJAR / SILAIS Managua',
+        fecha: '2026-09-16',
+        hora: '10:00',
+        inss: '2950124-0',
+        servicio: 'Consulta Externa - Medicina Interna',
+        cama: 'Consultorio 01',
+        motivo: 'Chequeo general de ingreso al biobanco académico',
+        hea: 'Paciente femenina de 22 años procedente de Tipitapa, refiere buen estado general, practica voleibol universitario.',
+        antecedentesInfecto: ['Sarampión'],
+        antecedentesHereditarios: ['Alergias'],
+        respaldoGenetico: 'Declarado en Anamnesis',
+        detalleFamiliar: 'Hermana con rinitis alérgica estacional; niega enfermedades crónicas metabólicas en padres.',
+        fc: 66, fr: 14, tas: 110, tad: 70, temp: 36.6,
+        peso: 54.0, talla: 1.65,
+        glucosa: 81, colesterol: 156, trigliceridos: 92, proteinas: 7.1,
+        observaciones: 'Estado nutricional normal (IMC 19.8 kg/m²), excelente condición cardiovascular en reposo y marcadores bioquímicos óptimos.',
+        indicaciones: 'Continuar con práctica deportiva regular, hidratación adecuada y esquema de vacunación actualizado.',
+        username: 'pac.valeria.gomez',
+        password: 'MINSA2026'
+      },
+      {
+        biobankCode: 'UNIJJAR-2026-004',
+        expediente: 'MINSA-2026-004',
+        nombre: 'Roberto Carlos Sánchez Pineda',
+        cedula: '001-180299-1089M',
+        edad: 27,
+        sexo: 'Masculino',
+        procedencia: 'Urbana',
+        establecimiento: 'Clínica Docente UNIJJAR / SILAIS Managua',
+        fecha: '2026-09-18',
+        hora: '11:20',
+        inss: '2598412-6',
+        servicio: 'Consulta Externa - Medicina Interna',
+        cama: 'Consultorio 03',
+        motivo: 'Fatiga vespertina y tamizaje cardiometabólico',
+        hea: 'Paciente masculino de 27 años con antecedente de obesidad exógena, refiere somnolencia postprandial y baja tolerancia al ejercicio.',
+        antecedentesInfecto: ['Hepatitis', 'Malaria'],
+        antecedentesHereditarios: ['Diabetes mellitus', 'Hipertensión arterial', 'Enfermedad hepática'],
+        respaldoGenetico: 'Prueba Genética Documentada',
+        detalleFamiliar: 'Ambos padres con Diabetes Mellitus tipo 2; estudio de susceptibilidad metabólica documentado en expediente.',
+        fc: 88, fr: 19, tas: 142, tad: 92, temp: 37.0,
+        peso: 98.0, talla: 1.74,
+        glucosa: 132, colesterol: 248, trigliceridos: 225, proteinas: 7.8,
+        observaciones: 'Obesidad grado I OMS (IMC 32.4 kg/m²), cifras tensionales en rango de Hipertensión Arterial grado 1 (142/92 mmHg), hiperglucemia en ayunas (≥126 mg/dL) e hiperlipidemia mixta.',
+        indicaciones: 'Referencia a Medicina Interna y Nutrición Clínica para confirmación diagnóstica (HbA1c, perfil hepático, MAPA), restricción de sodio y azúcares refinados, e inicio de programa supervisado de ejercicio.',
+        username: 'pac.roberto.sanchez',
+        password: 'MINSA2026'
+      },
+      {
+        biobankCode: 'UNIJJAR-2026-005',
+        expediente: 'MINSA-2026-005',
+        nombre: 'María Fernanda Herrera Duarte',
+        cedula: '401-300704-0005F',
+        edad: 22,
+        sexo: 'Femenino',
+        procedencia: 'Urbana',
+        establecimiento: 'Clínica Docente UNIJJAR / SILAIS Managua',
+        fecha: '2026-09-19',
+        hora: '14:10',
+        inss: '2987451-2',
+        servicio: 'Consulta Externa - Medicina Interna',
+        cama: 'Consultorio 02',
+        motivo: 'Valoración nutricional por bajo peso constitucional',
+        hea: 'Paciente femenina de 22 años que refiere horarios irregulares de alimentación durante rotaciones clínicas.',
+        antecedentesInfecto: [],
+        antecedentesHereditarios: ['Enfermedades renales'],
+        respaldoGenetico: 'Declarado en Anamnesis',
+        detalleFamiliar: 'Tía paterna con litiasis renal recurrente; resto de familiares aparentemente sanos.',
+        fc: 76, fr: 15, tas: 106, tad: 68, temp: 36.5,
+        peso: 45.5, talla: 1.61,
+        glucosa: 78, colesterol: 162, trigliceridos: 88, proteinas: 6.2,
+        observaciones: 'Bajo peso leve según clasificación OMS (IMC 17.6 kg/m²), signos vitales estables, glucemia y proteínas totales en límite inferior normal.',
+        indicaciones: 'Fraccionar alimentación en 5 tiempos diarios con aporte proteico adecuado (1.2 g/kg/día), hidratación de 2.5 L/día y seguimiento antropométrico mensual.',
+        username: 'pac.maria.herrera',
+        password: 'MINSA2026'
+      }
+    ];
+
+    function loadPersistedRecords() {
+      try {
+        const raw = safeStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            biobankRecords = parsed;
+          }
+        }
+      } catch (e) {
+        console.warn('Usando registros base por defecto:', e);
+      }
+    }
+
+    function persistRecords() {
+      try {
+        safeStorage.setItem(STORAGE_KEY, JSON.stringify(biobankRecords));
+      } catch (e) {
+        console.warn('No se pudo serializar en almacenamiento persistente:', e);
+      }
+    }
+
+    let activePatientSession = null;
+    let lastGeneratedCredentials = null;
+    let imcChartInstance = null;
+    let bioquimicaChartInstance = null;
+
+    // =========================================================================
+    // FUNCIONES DE CLASIFICACIÓN CLÍNICA SEGÚN RANGOS OMS
+    // =========================================================================
+    function classifyIMC(imc) {
+      if (imc < 18.5) return { label: 'Bajo peso', badge: 'bg-sky-100 text-sky-800 border-sky-200', color: '#0284C7', ref: '<18.5 kg/m²' };
+      if (imc < 25.0) return { label: 'Normal', badge: 'bg-emerald-100 text-emerald-800 border-emerald-200', color: '#059669', ref: '18.5 - 24.9 kg/m²' };
+      if (imc < 30.0) return { label: 'Sobrepeso', badge: 'bg-amber-100 text-amber-800 border-amber-200', color: '#D97706', ref: '25.0 - 29.9 kg/m²' };
+      return { label: 'Obesidad', badge: 'bg-red-100 text-[#D32F2F] border-red-200', color: '#D32F2F', ref: '≥30.0 kg/m²' };
+    }
+
+    function classifyTA(tas, tad) {
+      if (tas >= 140 || tad >= 90) return { label: 'Hipertensión Arterial (OMS)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+      if (tas < 90 || tad < 60) return { label: 'Hipotensión', badge: 'bg-sky-100 text-sky-800', status: 'warn' };
+      if (tas >= 130 || tad >= 85) return { label: 'Normal Alta', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      if (tas < 120 && tad < 80) return { label: 'Óptima (OMS)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+      return { label: 'Normal (OMS)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+    }
+
+    function classifyFC(fc) {
+      if (fc < 60) return { label: 'Bradicardia (<60)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      if (fc > 100) return { label: 'Taquicardia (>100)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+      return { label: 'Normal (60-100)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+    }
+
+    function classifyFR(fr) {
+      if (fr < 12) return { label: 'Bradipnea (<12)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      if (fr > 20) return { label: 'Taquipnea (>20)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+      return { label: 'Normal (12-20)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+    }
+
+    function classifyTemp(temp) {
+      if (temp < 36.5) return { label: 'Hipotermia leve (<36.5)', badge: 'bg-sky-100 text-sky-800', status: 'warn' };
+      if (temp >= 38.0) return { label: 'Fiebre (≥38.0 °C)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+      if (temp > 37.4) return { label: 'Febrícula (37.5-37.9)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      return { label: 'Normal (36.5-37.4)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+    }
+
+    function classifyGlucosa(g) {
+      if (g < 70) return { label: 'Hipoglucemia (<70)', badge: 'bg-sky-100 text-sky-800', status: 'warn' };
+      if (g <= 99) return { label: 'Normal OMS (70-99)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+      if (g <= 125) return { label: 'Glucosa Alterada (100-125)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      return { label: 'Hiperglucemia OMS (≥126)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+    }
+
+    function classifyColesterol(c) {
+      if (c < 200) return { label: 'Deseable (<200)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+      if (c <= 239) return { label: 'Limítrofe (200-239)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      return { label: 'Alto (≥240)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+    }
+
+    function classifyTrigliceridos(tg) {
+      if (tg < 150) return { label: 'Normal (<150)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+      if (tg <= 199) return { label: 'Limítrofe (150-199)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      return { label: 'Alto (≥200)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+    }
+
+    function classifyProteinas(p) {
+      if (p < 6.0) return { label: 'Baja (<6.0)', badge: 'bg-amber-100 text-amber-800', status: 'warn' };
+      if (p <= 8.3) return { label: 'Normal (6.0-8.3)', badge: 'bg-emerald-100 text-emerald-800', status: 'ok' };
+      return { label: 'Alta (>8.3)', badge: 'bg-red-100 text-[#D32F2F]', status: 'danger' };
+    }
+
+    function calcIMCValue(peso, talla) {
+      if (!peso || !talla || talla <= 0) return 0;
+      return peso / (talla * talla);
+    }
+
+    function calcMostellerASC(peso, tallaMeters) {
+      if (!peso || !tallaMeters || tallaMeters <= 0) return 0;
+      const tallaCm = tallaMeters * 100;
+      return Math.sqrt((tallaCm * peso) / 3600);
+    }
+
+    // =========================================================================
+    // NAVEGACIÓN ENTRE PESTAÑAS
+    // =========================================================================
+    function switchTab(tabId) {
+      const views = ['inicio', 'clinica', 'biobanco', 'paciente', 'bioestadistica'];
+      views.forEach(v => {
+        const viewEl = document.getElementById(`view-${v}`);
+        const tabEl = document.getElementById(`tab-${v}`);
+        if (viewEl) viewEl.classList.add('hidden');
+        if (tabEl) tabEl.classList.remove('active');
+      });
+      const activeView = document.getElementById(`view-${tabId}`);
+      const activeTab = document.getElementById(`tab-${tabId}`);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeTab) activeTab.classList.add('active');
+
+      if (tabId === 'bioestadistica') {
+        updateBiostatistics();
+      }
+      if (tabId === 'biobanco') {
+        renderBiobancoTable();
+      }
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // INICIALIZACIÓN DE FORMULARIOS Y COMPONENTES
+    // =========================================================================
+    function initFormCheckboxes() {
+      const infectoGrid = document.getElementById('fam-infecto-grid');
+      infectoGrid.innerHTML = INFECTO_LIST.map((item, idx) => `
+        <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" name="fam-infecto" value="${item}" class="rounded text-[#1B1464] focus:ring-[#1B1464]">
+          <span class="text-slate-700 font-medium leading-tight">${item}</span>
+        </label>
+      `).join('');
+
+      const heredGrid = document.getElementById('fam-hered-grid');
+      heredGrid.innerHTML = HEREDITARIAS_LIST.map((item, idx) => `
+        <label class="flex items-center gap-2 p-2 rounded-lg border border-slate-200 hover:bg-slate-50 cursor-pointer">
+          <input type="checkbox" name="fam-hered" value="${item}" class="rounded text-[#D32F2F] focus:ring-[#D32F2F]">
+          <span class="text-slate-700 font-medium leading-tight">${item}</span>
+        </label>
+      `).join('');
+    }
+
+    function updateNextExpedienteNumber() {
+      const nextNum = String(biobankRecords.length + 1).padStart(3, '0');
+      const expCode = `MINSA-2026-${nextNum}`;
+      document.getElementById('hc-expediente').value = expCode;
+      document.getElementById('preview-exp-badge').textContent = expCode;
+    }
+
+    function setDefaultDateTime() {
+      const now = new Date();
+      document.getElementById('hc-fecha').value = now.toISOString().split('T')[0];
+      document.getElementById('hc-hora').value = now.toTimeString().slice(0, 5);
+    }
+
+    // =========================================================================
+    // EVALUACIÓN OMS EN TIEMPO REAL EN EL FORMULARIO CLÍNICO
+    // =========================================================================
+    function updateLiveWHOEvaluation() {
+      const fc = parseFloat(document.getElementById('hc-fc').value);
+      const fr = parseFloat(document.getElementById('hc-fr').value);
+      const tas = parseFloat(document.getElementById('hc-tas').value);
+      const tad = parseFloat(document.getElementById('hc-tad').value);
+      const temp = parseFloat(document.getElementById('hc-temp').value);
+      const peso = parseFloat(document.getElementById('hc-peso').value);
+      const talla = parseFloat(document.getElementById('hc-talla').value);
+      const glucosa = parseFloat(document.getElementById('hc-glucosa').value);
+      const colesterol = parseFloat(document.getElementById('hc-colesterol').value);
+      const trigliceridos = parseFloat(document.getElementById('hc-trigliceridos').value);
+      const proteinas = parseFloat(document.getElementById('hc-proteinas').value);
+
+      renderEvalTag('eval-fc', !isNaN(fc) ? classifyFC(fc) : null);
+      renderEvalTag('eval-fr', !isNaN(fr) ? classifyFR(fr) : null);
+      renderEvalTag('eval-ta', (!isNaN(tas) && !isNaN(tad)) ? classifyTA(tas, tad) : null);
+      renderEvalTag('eval-temp', !isNaN(temp) ? classifyTemp(temp) : null);
+
+      if (!isNaN(peso) && !isNaN(talla) && talla > 0) {
+        const imc = calcIMCValue(peso, talla);
+        const asc = calcMostellerASC(peso, talla);
+        const imcCat = classifyIMC(imc);
+        document.getElementById('calc-imc').textContent = imc.toFixed(1);
+        document.getElementById('calc-asc').textContent = asc.toFixed(2);
+        const evalImcEl = document.getElementById('eval-imc');
+        evalImcEl.innerHTML = `<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-bold ${imcCat.badge}">${imcCat.label} OMS (${imcCat.ref})</span>`;
+      } else {
+        document.getElementById('calc-imc').textContent = '--';
+        document.getElementById('calc-asc').textContent = '--';
+        document.getElementById('eval-imc').textContent = 'Ingrese peso y talla';
+      }
+
+      renderEvalTag('eval-glucosa', !isNaN(glucosa) ? classifyGlucosa(glucosa) : null);
+      renderEvalTag('eval-colesterol', !isNaN(colesterol) ? classifyColesterol(colesterol) : null);
+      renderEvalTag('eval-trigliceridos', !isNaN(trigliceridos) ? classifyTrigliceridos(trigliceridos) : null);
+      renderEvalTag('eval-proteinas', !isNaN(proteinas) ? classifyProteinas(proteinas) : null);
+    }
+
+    function renderEvalTag(elementId, classification) {
+      const el = document.getElementById(elementId);
+      if (!classification) {
+        el.innerHTML = `<span class="text-slate-400">Esperando dato...</span>`;
+        return;
+      }
+      el.innerHTML = `<span class="inline-block px-2 py-0.5 rounded-full text-[11px] font-bold ${classification.badge}">${classification.label}</span>`;
+    }
+
+    // =========================================================================
+    // AUTOCOMPLETAR CASO DE EJEMPLO Y GUARDADO DE HISTORIA CLÍNICA
+    // =========================================================================
+    function autofillClinicalCase() {
+      document.getElementById('hc-nombre').value = 'Luis Fernando Ortega Villavicencio';
+      document.getElementById('hc-cedula').value = '001-190802-1033L';
+      document.getElementById('hc-inss').value = '2894510-7';
+      document.getElementById('hc-edad').value = 24;
+      document.getElementById('hc-sexo').value = 'Masculino';
+      document.getElementById('hc-nacimiento').value = '19/08/2002 - Managua, Nicaragua';
+      document.getElementById('hc-procedencia').value = 'Urbana';
+      document.getElementById('hc-religion').value = 'Católica';
+      document.getElementById('hc-escolaridad').value = 'Universitaria (Medicina)';
+      document.getElementById('hc-profesion').value = 'Estudiante Universitario';
+      document.getElementById('hc-direccion').value = 'Colonia Centroamérica, Distrito V, Managua';
+      document.getElementById('hc-padre').value = 'Fernando José Ortega Salgado';
+      document.getElementById('hc-madre').value = 'Claudia Patricia Villavicencio';
+      document.getElementById('hc-motivo').value = 'Tamizaje biomédico preventivo y evaluación metabólica semestral';
+      document.getElementById('hc-hea').value = 'Paciente masculino de 24 años, asintomático al momento de la consulta, acude voluntariamente para registro en el Biobanco Digital UNIJJAR y valoración preventiva.';
+      document.getElementById('hc-sistemas').value = 'Cardiovascular, respiratorio, digestivo, genitourinario y neurológico sin alteraciones referidas.';
+
+      // Marcar checkboxes de ejemplo
+      document.querySelectorAll('input[name="fam-infecto"]').forEach(cb => {
+        cb.checked = (cb.value === 'Varicela');
+      });
+      document.querySelectorAll('input[name="fam-hered"]').forEach(cb => {
+        cb.checked = (cb.value === 'Diabetes mellitus' || cb.value === 'Hipertensión arterial');
+      });
+      document.getElementById('hc-respaldo-genetico').value = 'Declarado en Anamnesis';
+      document.getElementById('hc-fam-detalle').value = 'Padre con Hipertensión Arterial controlada; abuela materna con Diabetes Mellitus tipo 2.';
+
+      // Signos vitales, antropometría y bioquímica
+      document.getElementById('hc-fc').value = 76;
+      document.getElementById('hc-fr').value = 16;
+      document.getElementById('hc-tas').value = 118;
+      document.getElementById('hc-tad').value = 76;
+      document.getElementById('hc-temp').value = 36.7;
+      document.getElementById('hc-peso').value = 71.0;
+      document.getElementById('hc-talla').value = 1.73;
+
+      document.getElementById('hc-glucosa').value = 91;
+      document.getElementById('hc-colesterol').value = 182;
+      document.getElementById('hc-trigliceridos').value = 124;
+      document.getElementById('hc-proteinas').value = 7.4;
+
+      document.getElementById('hc-observaciones').value = 'Paciente joven con estado nutricional normal según OMS (IMC 23.7 kg/m²), tensión arterial óptima y parámetros bioquímicos dentro de límites fisiológicos. Antecedentes heredofamiliares positivos para HTA y DM2.';
+      document.getElementById('hc-indicaciones').value = 'Mantener hábitos de alimentación saludable, actividad física cardiovascular 150 minutos semanales, control de ingesta de sodio y seguimiento preventivo anual.';
+
+      updateLiveWHOEvaluation();
+    }
+
+    function resetClinicalForm() {
+      document.getElementById('minsa-form').reset();
+      updateNextExpedienteNumber();
+      setDefaultDateTime();
+      updateLiveWHOEvaluation();
+    }
+
+    function generatePatientUsername(fullName) {
+      const clean = fullName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z\s]/g, '')
+        .trim()
+        .split(/\s+/);
+      const first = clean[0] || 'paciente';
+      const last = clean.length > 2 ? clean[2] : (clean[1] || 'unijjar');
+      let candidate = `pac.${first}.${last}`;
+      let counter = 1;
+      while (biobankRecords.some(r => r.username === candidate)) {
+        counter++;
+        candidate = `pac.${first}.${last}${counter}`;
+      }
+      return candidate;
+    }
+
+    function handleSaveClinicalRecord(e) {
+      e.preventDefault();
+
+      const nextIdx = String(biobankRecords.length + 1).padStart(3, '0');
+      const biobankCode = `UNIJJAR-2026-${nextIdx}`;
+      const expediente = document.getElementById('hc-expediente').value;
+      const nombre = document.getElementById('hc-nombre').value.trim();
+
+      const infectoChecked = Array.from(document.querySelectorAll('input[name="fam-infecto"]:checked')).map(c => c.value);
+      const heredChecked = Array.from(document.querySelectorAll('input[name="fam-hered"]:checked')).map(c => c.value);
+
+      const username = generatePatientUsername(nombre);
+      const password = 'MINSA2026';
+
+      const newRecord = {
+        biobankCode,
+        expediente,
+        nombre,
+        cedula: document.getElementById('hc-cedula').value.trim(),
+        edad: parseInt(document.getElementById('hc-edad').value, 10),
+        sexo: document.getElementById('hc-sexo').value,
+        procedencia: document.getElementById('hc-procedencia').value,
+        establecimiento: document.getElementById('hc-establecimiento').value.trim(),
+        fecha: document.getElementById('hc-fecha').value,
+        hora: document.getElementById('hc-hora').value,
+        inss: document.getElementById('hc-inss').value.trim() || 'No consignado',
+        servicio: document.getElementById('hc-servicio').value.trim(),
+        cama: document.getElementById('hc-cama').value.trim(),
+        motivo: document.getElementById('hc-motivo').value.trim(),
+        hea: document.getElementById('hc-hea').value.trim(),
+        antecedentesInfecto: infectoChecked,
+        antecedentesHereditarios: heredChecked,
+        respaldoGenetico: document.getElementById('hc-respaldo-genetico').value,
+        detalleFamiliar: document.getElementById('hc-fam-detalle').value.trim() || 'Sin observaciones adicionales',
+        fc: parseFloat(document.getElementById('hc-fc').value),
+        fr: parseFloat(document.getElementById('hc-fr').value),
+        tas: parseFloat(document.getElementById('hc-tas').value),
+        tad: parseFloat(document.getElementById('hc-tad').value),
+        temp: parseFloat(document.getElementById('hc-temp').value),
+        peso: parseFloat(document.getElementById('hc-peso').value),
+        talla: parseFloat(document.getElementById('hc-talla').value),
+        glucosa: parseFloat(document.getElementById('hc-glucosa').value),
+        colesterol: parseFloat(document.getElementById('hc-colesterol').value),
+        trigliceridos: parseFloat(document.getElementById('hc-trigliceridos').value),
+        proteinas: parseFloat(document.getElementById('hc-proteinas').value),
+        observaciones: document.getElementById('hc-observaciones').value.trim(),
+        indicaciones: document.getElementById('hc-indicaciones').value.trim(),
+        username,
+        password
+      };
+
+      biobankRecords.push(newRecord);
+      persistRecords();
+      lastGeneratedCredentials = { username, password, biobankCode, nombre, expediente };
+
+      // Actualizar KPIs, tablas y accesos demo
+      updateDashboardKPIs();
+      renderBiobancoTable();
+      renderPatientDemoButtons();
+      resetClinicalForm();
+
+      // Mostrar modal de credenciales
+      document.getElementById('cred-biobank-code').textContent = biobankCode;
+      document.getElementById('cred-patient-name').textContent = nombre;
+      document.getElementById('cred-exp-num').textContent = expediente;
+      document.getElementById('cred-username').textContent = username;
+      document.getElementById('cred-password').textContent = password;
+      document.getElementById('copy-feedback').classList.add('hidden');
+      document.getElementById('credentials-modal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeCredentialsModal() {
+      document.getElementById('credentials-modal').classList.add('hidden');
+    }
+
+    function copyGeneratedCredentials() {
+      if (!lastGeneratedCredentials) return;
+      const text = `Portal del Paciente UNIJJAR-MINSA | Código: ${lastGeneratedCredentials.biobankCode} | Usuario: ${lastGeneratedCredentials.username} | Contraseña: ${lastGeneratedCredentials.password}`;
+      const tempInput = document.createElement('textarea');
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+
+      const fb = document.getElementById('copy-feedback');
+      fb.classList.remove('hidden');
+    }
+
+    function openPortalWithNewCredentials() {
+      closeCredentialsModal();
+      switchTab('paciente');
+      if (lastGeneratedCredentials) {
+        loginAsPatient(lastGeneratedCredentials.username, lastGeneratedCredentials.password);
+      }
+    }
+
+    // =========================================================================
+    // TABLA DEL BIOBANCO DIGITAL Y MODAL DE FICHA BIOMÉDICA INTEGRADA
+    // =========================================================================
+    function renderBiobancoTable() {
+      const searchVal = (document.getElementById('biobanco-search')?.value || '').toLowerCase();
+      const imcFilter = document.getElementById('biobanco-filter-imc')?.value || 'ALL';
+
+      const filtered = biobankRecords.filter(rec => {
+        const imc = calcIMCValue(rec.peso, rec.talla);
+        const imcCat = classifyIMC(imc).label;
+        const allFam = [...rec.antecedentesHereditarios, ...rec.antecedentesInfecto, rec.detalleFamiliar].join(' ').toLowerCase();
+
+        const matchesSearch = rec.biobankCode.toLowerCase().includes(searchVal) || allFam.includes(searchVal);
+        const matchesImc = (imcFilter === 'ALL' || imcCat === imcFilter);
+        return matchesSearch && matchesImc;
+      });
+
+      document.getElementById('biobanco-count-badge').textContent = `${filtered.length} Muestra${filtered.length === 1 ? '' : 's'} Digital${filtered.length === 1 ? '' : 'es'}`;
+
+      const tbody = document.getElementById('biobanco-tbody');
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center text-slate-500 text-sm">No se encontraron registros con los criterios seleccionados.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(rec => {
+        const imc = calcIMCValue(rec.peso, rec.talla);
+        const imcCat = classifyIMC(imc);
+        const gluCat = classifyGlucosa(rec.glucosa);
+        const colCat = classifyColesterol(rec.colesterol);
+
+        const hasHereditarios = rec.antecedentesHereditarios.length > 0;
+        const famText = hasHereditarios
+          ? rec.antecedentesHereditarios.slice(0, 2).join(', ') + (rec.antecedentesHereditarios.length > 2 ? '...' : '')
+          : (rec.antecedentesInfecto.length > 0 ? rec.antecedentesInfecto[0] : 'Sin antecedentes mayores');
+
+        const respaldoBadge = rec.respaldoGenetico === 'Prueba Genética Documentada'
+          ? 'bg-purple-100 text-purple-800 border-purple-200'
+          : 'bg-slate-100 text-slate-700 border-slate-200';
+
+        return `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-3.5 px-4">
+              <span class="font-mono font-bold text-[#1B1464] text-xs sm:text-sm">${rec.biobankCode}</span>
+              <span class="block text-[11px] text-slate-400">${rec.fecha}</span>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="font-semibold text-slate-800">${rec.sexo}</span>
+              <span class="block text-xs text-slate-500">${rec.edad} años • ${rec.procedencia}</span>
+            </td>
+            <td class="py-3.5 px-4">
+              <span class="font-medium text-slate-800 block text-xs">${famText}</span>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${respaldoBadge}">
+                ${rec.respaldoGenetico}
+              </span>
+            </td>
+            <td class="py-3.5 px-4">
+              <div class="text-xs text-slate-700 font-medium">${rec.peso.toFixed(1)} kg / ${rec.talla.toFixed(2)} m</div>
+              <div class="mt-1 flex items-center gap-1.5">
+                <span class="font-bold text-slate-900 text-xs">${imc.toFixed(1)} kg/m²</span>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${imcCat.badge}">${imcCat.label}</span>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 space-y-1">
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500">Glu:</span>
+                <span class="font-bold text-slate-800">${rec.glucosa} mg/dL</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold ${gluCat.badge}">${gluCat.label.split(' ')[0]}</span>
+              </div>
+              <div class="flex items-center gap-1.5 text-xs">
+                <span class="text-slate-500">Col:</span>
+                <span class="font-bold text-slate-800">${rec.colesterol} mg/dL</span>
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-semibold ${colCat.badge}">${colCat.label.split(' ')[0]}</span>
+              </div>
+            </td>
+            <td class="py-3.5 px-4 text-right">
+              <button type="button" onclick="openDetailModal('${rec.biobankCode}')" class="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#1B1464] hover:bg-[#281F85] text-white text-xs font-bold rounded-xl shadow-xs transition">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-[#FFD700]"></i>
+                Ver Ficha
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      safeCreateIcons();
+    }
+
+    function exportBiobancoCSV() {
+      try {
+        const headers = ['Codigo_Biobanco', 'Fecha', 'Sexo', 'Edad', 'Procedencia', 'Peso_kg', 'Talla_m', 'IMC_kg_m2', 'Categoria_IMC_OMS', 'TAS_mmHg', 'TAD_mmHg', 'FC_lpm', 'FR_rpm', 'Temp_C', 'Glucosa_mg_dL', 'Colesterol_mg_dL', 'Trigliceridos_mg_dL', 'Proteinas_g_dL', 'Respaldo_Familiar'];
+        const rows = biobankRecords.map(r => {
+          const imc = calcIMCValue(r.peso, r.talla);
+          return [
+            r.biobankCode, r.fecha, r.sexo, r.edad, r.procedencia,
+            r.peso.toFixed(1), r.talla.toFixed(2), imc.toFixed(1), classifyIMC(imc).label,
+            r.tas, r.tad, r.fc, r.fr, r.temp.toFixed(1),
+            r.glucosa, r.colesterol, r.trigliceridos, r.proteinas.toFixed(1),
+            `"${r.respaldoGenetico}"`
+          ].join(',');
+        });
+        const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'Biobanco_Digital_UNIJJAR_2026.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } catch (e) {
+        console.warn('Error al exportar CSV:', e);
+      }
+    }
+
+    function openDetailModal(biobankCode) {
+      const rec = biobankRecords.find(r => r.biobankCode === biobankCode);
+      if (!rec) return;
+
+      const imc = calcIMCValue(rec.peso, rec.talla);
+      const asc = calcMostellerASC(rec.peso, rec.talla);
+      const imcCat = classifyIMC(imc);
+      const fcCat = classifyFC(rec.fc);
+      const frCat = classifyFR(rec.fr);
+      const taCat = classifyTA(rec.tas, rec.tad);
+      const tempCat = classifyTemp(rec.temp);
+      const gluCat = classifyGlucosa(rec.glucosa);
+      const colCat = classifyColesterol(rec.colesterol);
+      const tgCat = classifyTrigliceridos(rec.trigliceridos);
+      const protCat = classifyProteinas(rec.proteinas);
+
+      document.getElementById('modal-code-title').textContent = `${rec.biobankCode} • Expediente Anonimizado`;
+
+      document.getElementById('modal-detail-body').innerHTML = `
+        <!-- Tarjeta 1: Identificación Anonimizada -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="bg-[#1B1464] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider">
+            1. Identificación Anonimizada y Contexto Epidemiológico
+          </div>
+          <div class="p-4 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+            <div><span class="text-slate-500 block">Código Biobanco</span><strong class="font-mono text-[#1B1464]">${rec.biobankCode}</strong></div>
+            <div><span class="text-slate-500 block">Edad / Sexo</span><strong>${rec.edad} años / ${rec.sexo}</strong></div>
+            <div><span class="text-slate-500 block">Procedencia</span><strong>${rec.procedencia}</strong></div>
+            <div><span class="text-slate-500 block">Fecha de Registro</span><strong>${rec.fecha} (${rec.hora})</strong></div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 2: Signos Vitales y Antropometría con Rangos OMS -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="bg-[#1B1464] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider">
+            2. Signos Vitales y Somatometría (Evaluación OMS)
+          </div>
+          <div class="p-4 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Frecuencia Cardíaca (Ref: 60-100 lpm)</span>
+              <div class="flex items-center justify-between mt-1">
+                <strong class="text-sm">${rec.fc} lpm</strong>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${fcCat.badge}">${fcCat.label}</span>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Frecuencia Respiratoria (Ref: 12-20 rpm)</span>
+              <div class="flex items-center justify-between mt-1">
+                <strong class="text-sm">${rec.fr} rpm</strong>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${frCat.badge}">${frCat.label}</span>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Tensión Arterial (Óptima: &lt;120/80)</span>
+              <div class="flex items-center justify-between mt-1">
+                <strong class="text-sm">${rec.tas}/${rec.tad} mmHg</strong>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${taCat.badge}">${taCat.label}</span>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Temperatura (Ref: 36.5-37.4 °C)</span>
+              <div class="flex items-center justify-between mt-1">
+                <strong class="text-sm">${rec.temp.toFixed(1)} °C</strong>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${tempCat.badge}">${tempCat.label}</span>
+              </div>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Peso / Talla / ASC (Mosteller)</span>
+              <strong class="text-sm block mt-1">${rec.peso.toFixed(1)} kg • ${rec.talla.toFixed(2)} m • ${asc.toFixed(2)} m²</strong>
+            </div>
+            <div class="p-3 bg-indigo-50/70 rounded-lg border border-indigo-200">
+              <span class="text-[#1B1464] font-semibold block">IMC (Ref OMS: 18.5-24.9 kg/m²)</span>
+              <div class="flex items-center justify-between mt-1">
+                <strong class="text-sm text-[#1B1464]">${imc.toFixed(1)} kg/m²</strong>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${imcCat.badge}">${imcCat.label}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 3: Marcadores Bioquímicos con Rangos OMS -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="bg-[#1B1464] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider">
+            3. Marcadores Bioquímicos Séricos (Estándares OMS)
+          </div>
+          <div class="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Glucosa Basal (70-99 mg/dL)</span>
+              <strong class="text-base block mt-1">${rec.glucosa} mg/dL</strong>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${gluCat.badge}">${gluCat.label}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Colesterol Total (&lt;200 mg/dL)</span>
+              <strong class="text-base block mt-1">${rec.colesterol} mg/dL</strong>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${colCat.badge}">${colCat.label}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Triglicéridos (&lt;150 mg/dL)</span>
+              <strong class="text-base block mt-1">${rec.trigliceridos} mg/dL</strong>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${tgCat.badge}">${tgCat.label}</span>
+            </div>
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <span class="text-slate-500 block">Proteínas Totales (6.0-8.3 g/dL)</span>
+              <strong class="text-base block mt-1">${rec.proteinas.toFixed(1)} g/dL</strong>
+              <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${protCat.badge}">${protCat.label}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta 4: Antecedentes Heredofamiliares y Exploración Clínica -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="bg-[#1B1464] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider">
+            4. Antecedentes Heredofamiliares y Síntesis Clínica
+          </div>
+          <div class="p-4 space-y-2.5 text-xs text-slate-700">
+            <p><strong>Respaldo del Antecedente:</strong> <span class="px-2 py-0.5 rounded bg-slate-100 font-semibold">${rec.respaldoGenetico}</span></p>
+            <p><strong>Antecedentes Hereditarios:</strong> ${rec.antecedentesHereditarios.length ? rec.antecedentesHereditarios.join(', ') : 'Ninguno consignado'}</p>
+            <p><strong>Antecedentes Infecto-Contagiosos:</strong> ${rec.antecedentesInfecto.length ? rec.antecedentesInfecto.join(', ') : 'Ninguno consignado'}</p>
+            <p><strong>Detalle Familiar:</strong> ${rec.detalleFamiliar}</p>
+            <p><strong>Motivo y Evolución:</strong> ${rec.motivo} — ${rec.hea}</p>
+          </div>
+        </div>
+
+        <!-- Tarjeta 5: Observaciones Médicas y Correlación Académica Genética-Bioquímica-Anatomía -->
+        <div class="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-xs">
+          <div class="bg-[#1B1464] text-white px-4 py-2.5 text-xs font-bold uppercase tracking-wider">
+            5. Observaciones Médicas y Correlación Académica (Genética • Bioquímica • Anatomía)
+          </div>
+          <div class="p-4 space-y-3 text-xs text-slate-700 leading-relaxed">
+            <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+              <strong class="text-[#1B1464] block mb-1">Valoración e Indicaciones Clínicas:</strong>
+              <p>${rec.observaciones}</p>
+              <p class="mt-1 text-emerald-800 font-medium"><strong>Plan Preventivo:</strong> ${rec.indicaciones}</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="p-3 bg-indigo-50/60 rounded-lg border border-indigo-100">
+                <strong class="text-[#1B1464] block mb-1">Correlación Genética</strong>
+                <p>Análisis de susceptibilidad poligénica y agregación familiar (${rec.respaldoGenetico.toLowerCase()}) vinculada a riesgo cardiometabólico.</p>
+              </div>
+              <div class="p-3 bg-amber-50/60 rounded-lg border border-amber-100">
+                <strong class="text-amber-900 block mb-1">Correlación Bioquímica</strong>
+                <p>Integración de glucemia basal (${rec.glucosa} mg/dL) y metabolismo lipídico (${rec.colesterol}/${rec.trigliceridos} mg/dL) en la homeostasis energética.</p>
+              </div>
+              <div class="p-3 bg-emerald-50/60 rounded-lg border border-emerald-100">
+                <strong class="text-emerald-900 block mb-1">Correlación Anatómica</strong>
+                <p>Somatometría regional con IMC de ${imc.toFixed(1)} kg/m² (${imcCat.label}) y superficie corporal de ${asc.toFixed(2)} m² (Mosteller).</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('biobank-detail-modal').classList.remove('hidden');
+      safeCreateIcons();
+    }
+
+    function closeDetailModal() {
+      document.getElementById('biobank-detail-modal').classList.add('hidden');
+    }
+
+    // =========================================================================
+    // PORTAL DEL PACIENTE (AUTENTICACIÓN Y VISTA CLÁSICA EN TARJETAS)
+    // =========================================================================
+    function renderPatientDemoButtons() {
+      const container = document.getElementById('patient-demo-buttons');
+      container.innerHTML = biobankRecords.map(rec => `
+        <button type="button" onclick="loginAsPatient('${rec.username}', '${rec.password}')" class="px-3 py-1.5 bg-slate-100 hover:bg-[#1B1464] hover:text-white text-slate-700 rounded-lg text-xs font-semibold transition border border-slate-200">
+          ${rec.biobankCode} (${rec.username})
+        </button>
+      `).join('');
+    }
+
+    function handlePatientLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('patient-username').value.trim();
+      const pass = document.getElementById('patient-password').value.trim();
+      loginAsPatient(user, pass);
+    }
+
+    function loginAsPatient(username, password) {
+      const found = biobankRecords.find(r => r.username === username && r.password === password);
+      const errBox = document.getElementById('patient-login-error');
+
+      if (!found) {
+        errBox.classList.remove('hidden');
+        return;
+      }
+
+      errBox.classList.add('hidden');
+      activePatientSession = found;
+      renderPatientPortalView(found);
+    }
+
+    function logoutPatient() {
+      activePatientSession = null;
+      document.getElementById('patient-dashboard-box').classList.add('hidden');
+      document.getElementById('patient-login-box').classList.remove('hidden');
+      document.getElementById('patient-username').value = '';
+      document.getElementById('patient-password').value = '';
+    }
+
+    function renderPatientPortalView(rec) {
+      document.getElementById('patient-login-box').classList.add('hidden');
+      document.getElementById('patient-dashboard-box').classList.remove('hidden');
+
+      document.getElementById('pat-view-nombre').textContent = rec.nombre;
+      document.getElementById('pat-view-meta').textContent = `Expediente Clínico: ${rec.expediente} • Código Biobanco: ${rec.biobankCode}`;
+      document.getElementById('pat-view-edad-sexo').textContent = `${rec.edad} años • ${rec.sexo}`;
+      document.getElementById('pat-view-fecha').textContent = `${rec.fecha} (${rec.hora})`;
+      document.getElementById('pat-view-establecimiento').textContent = rec.establecimiento;
+      document.getElementById('pat-view-user').textContent = rec.username;
+
+      const imc = calcIMCValue(rec.peso, rec.talla);
+      const asc = calcMostellerASC(rec.peso, rec.talla);
+      const imcCat = classifyIMC(imc);
+      const fcCat = classifyFC(rec.fc);
+      const frCat = classifyFR(rec.fr);
+      const taCat = classifyTA(rec.tas, rec.tad);
+      const tempCat = classifyTemp(rec.temp);
+
+      document.getElementById('pat-view-vitales').innerHTML = `
+        <div class="py-2.5 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Frecuencia Cardíaca</span>
+            <span class="text-xs text-slate-500">Rango normal OMS: 60 - 100 lpm</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.fc} lpm</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${fcCat.badge}">${fcCat.label}</span>
+          </div>
+        </div>
+        <div class="py-2.5 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Frecuencia Respiratoria</span>
+            <span class="text-xs text-slate-500">Rango normal OMS: 12 - 20 rpm</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.fr} rpm</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${frCat.badge}">${frCat.label}</span>
+          </div>
+        </div>
+        <div class="py-2.5 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Tensión Arterial</span>
+            <span class="text-xs text-slate-500">Óptima OMS: &lt;120 / &lt;80 mmHg</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.tas}/${rec.tad} mmHg</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${taCat.badge}">${taCat.label}</span>
+          </div>
+        </div>
+        <div class="py-2.5 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Temperatura Corporal</span>
+            <span class="text-xs text-slate-500">Rango normal: 36.5 - 37.4 °C</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.temp.toFixed(1)} °C</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${tempCat.badge}">${tempCat.label}</span>
+          </div>
+        </div>
+        <div class="py-2.5 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Índice de Masa Corporal (IMC)</span>
+            <span class="text-xs text-slate-500">Peso: ${rec.peso} kg • Talla: ${rec.talla} m • ASC: ${asc.toFixed(2)} m² (Normal OMS: 18.5-24.9)</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-[#1B1464] block">${imc.toFixed(1)} kg/m²</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold border ${imcCat.badge}">${imcCat.label}</span>
+          </div>
+        </div>
+      `;
+
+      const gluCat = classifyGlucosa(rec.glucosa);
+      const colCat = classifyColesterol(rec.colesterol);
+      const tgCat = classifyTrigliceridos(rec.trigliceridos);
+      const protCat = classifyProteinas(rec.proteinas);
+
+      document.getElementById('pat-view-bioquimica').innerHTML = `
+        <div class="py-3 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Glucosa en Ayunas</span>
+            <span class="text-xs text-slate-500">Rango normal OMS: 70 - 99 mg/dL</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.glucosa} mg/dL</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${gluCat.badge}">${gluCat.label}</span>
+          </div>
+        </div>
+        <div class="py-3 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Colesterol Total</span>
+            <span class="text-xs text-slate-500">Deseable OMS: &lt;200 mg/dL</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.colesterol} mg/dL</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${colCat.badge}">${colCat.label}</span>
+          </div>
+        </div>
+        <div class="py-3 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Triglicéridos Séricos</span>
+            <span class="text-xs text-slate-500">Rango normal: &lt;150 mg/dL</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.trigliceridos} mg/dL</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${tgCat.badge}">${tgCat.label}</span>
+          </div>
+        </div>
+        <div class="py-3 flex items-center justify-between">
+          <div>
+            <span class="font-semibold text-slate-800 block">Proteínas Totales</span>
+            <span class="text-xs text-slate-500">Rango normal: 6.0 - 8.3 g/dL</span>
+          </div>
+          <div class="text-right">
+            <span class="font-bold text-slate-900 block">${rec.proteinas.toFixed(1)} g/dL</span>
+            <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${protCat.badge}">${protCat.label}</span>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('pat-view-observaciones').textContent = rec.observaciones;
+      document.getElementById('pat-view-indicaciones').textContent = rec.indicaciones;
+      safeCreateIcons();
+    }
+
+    // =========================================================================
+    // KPIs EN INICIO Y BIOESTADÍSTICA DESCRIPTIVA (TABLAS Y CHART.JS)
+    // =========================================================================
+    function computeDescriptiveStats(arr) {
+      const n = arr.length;
+      if (n === 0) return { n: 0, mean: 0, median: 0, sd: 0, min: 0, max: 0, range: 0 };
+      const sorted = [...arr].sort((a, b) => a - b);
+      const mean = arr.reduce((acc, v) => acc + v, 0) / n;
+      const median = n % 2 === 0 ? (sorted[n / 2 - 1] + sorted[n / 2]) / 2 : sorted[Math.floor(n / 2)];
+      const variance = n > 1 ? arr.reduce((acc, v) => acc + Math.pow(v - mean, 2), 0) / (n - 1) : 0;
+      const sd = Math.sqrt(variance);
+      const min = sorted[0];
+      const max = sorted[n - 1];
+      return { n, mean, median, sd, min, max, range: max - min };
+    }
+
+    function updateDashboardKPIs() {
+      const n = biobankRecords.length;
+      const imcValues = biobankRecords.map(r => calcIMCValue(r.peso, r.talla));
+      const gluValues = biobankRecords.map(r => r.glucosa);
+      const withFam = biobankRecords.filter(r => r.antecedentesHereditarios.length > 0 || r.antecedentesInfecto.length > 0).length;
+
+      const avgImc = imcValues.reduce((a, b) => a + b, 0) / (n || 1);
+      const avgGlu = gluValues.reduce((a, b) => a + b, 0) / (n || 1);
+      const pctFam = Math.round((withFam / (n || 1)) * 100);
+
+      document.getElementById('kpi-total').textContent = n;
+      document.getElementById('kpi-imc').innerHTML = `${avgImc.toFixed(1)} <span class="text-sm font-medium text-slate-500">kg/m²</span>`;
+      document.getElementById('kpi-glucosa').innerHTML = `${avgGlu.toFixed(1)} <span class="text-sm font-medium text-slate-500">mg/dL</span>`;
+      document.getElementById('kpi-antecedentes').textContent = `${pctFam}%`;
+    }
+
+    function updateBiostatistics() {
+      const quantVars = [
+        { label: 'Edad (años)', values: biobankRecords.map(r => r.edad), dec: 1 },
+        { label: 'IMC (kg/m²)', values: biobankRecords.map(r => calcIMCValue(r.peso, r.talla)), dec: 1 },
+        { label: 'TA Sistólica (mmHg)', values: biobankRecords.map(r => r.tas), dec: 1 },
+        { label: 'TA Diastólica (mmHg)', values: biobankRecords.map(r => r.tad), dec: 1 },
+        { label: 'Frec. Cardíaca (lpm)', values: biobankRecords.map(r => r.fc), dec: 1 },
+        { label: 'Glucosa Basal (mg/dL)', values: biobankRecords.map(r => r.glucosa), dec: 1 },
+        { label: 'Colesterol Total (mg/dL)', values: biobankRecords.map(r => r.colesterol), dec: 1 },
+        { label: 'Triglicéridos (mg/dL)', values: biobankRecords.map(r => r.trigliceridos), dec: 1 },
+        { label: 'Proteínas Totales (g/dL)', values: biobankRecords.map(r => r.proteinas), dec: 2 }
+      ];
+
+      const tbody = document.getElementById('stats-quant-tbody');
+      tbody.innerHTML = quantVars.map(v => {
+        const s = computeDescriptiveStats(v.values);
+        return `
+          <tr class="hover:bg-slate-50">
+            <td class="py-2.5 px-3 font-semibold text-slate-800">${v.label}</td>
+            <td class="py-2.5 px-2 text-center font-mono">${s.n}</td>
+            <td class="py-2.5 px-2 text-right font-bold text-[#1B1464]">${s.mean.toFixed(v.dec)}</td>
+            <td class="py-2.5 px-2 text-right">${s.median.toFixed(v.dec)}</td>
+            <td class="py-2.5 px-2 text-right text-slate-600">${s.sd.toFixed(v.dec)}</td>
+            <td class="py-2.5 px-2 text-right">${s.min.toFixed(v.dec)}</td>
+            <td class="py-2.5 px-2 text-right">${s.max.toFixed(v.dec)}</td>
+            <td class="py-2.5 px-3 text-right font-medium">${s.range.toFixed(v.dec)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Cualitativas
+      const n = biobankRecords.length || 1;
+      const fem = biobankRecords.filter(r => r.sexo === 'Femenino').length;
+      const masc = biobankRecords.filter(r => r.sexo === 'Masculino').length;
+
+      const imcCounts = { 'Bajo peso': 0, 'Normal': 0, 'Sobrepeso': 0, 'Obesidad': 0 };
+      biobankRecords.forEach(r => {
+        const cat = classifyIMC(calcIMCValue(r.peso, r.talla)).label;
+        imcCounts[cat]++;
+      });
+
+      const genDoc = biobankRecords.filter(r => r.respaldoGenetico === 'Prueba Genética Documentada').length;
+      const genDec = biobankRecords.filter(r => r.respaldoGenetico === 'Declarado en Anamnesis').length;
+
+      document.getElementById('stats-qual-container').innerHTML = `
+        <div>
+          <h4 class="font-bold text-[#1B1464] uppercase mb-1.5">Distribución por Sexo</h4>
+          <div class="space-y-1">
+            <div class="flex justify-between"><span>Femenino</span><strong>${fem} (${((fem/n)*100).toFixed(1)}%)</strong></div>
+            <div class="flex justify-between"><span>Masculino</span><strong>${masc} (${((masc/n)*100).toFixed(1)}%)</strong></div>
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-200">
+          <h4 class="font-bold text-[#1B1464] uppercase mb-1.5">Clasificación IMC (OMS)</h4>
+          <div class="space-y-1">
+            ${Object.entries(imcCounts).map(([k, val]) => `
+              <div class="flex justify-between"><span>${k}</span><strong>${val} (${((val/n)*100).toFixed(1)}%)</strong></div>
+            `).join('')}
+          </div>
+        </div>
+        <div class="pt-2 border-t border-slate-200">
+          <h4 class="font-bold text-[#1B1464] uppercase mb-1.5">Respaldo Antecedentes Familiares</h4>
+          <div class="space-y-1">
+            <div class="flex justify-between"><span>Prueba Genética Documentada</span><strong>${genDoc} (${((genDoc/n)*100).toFixed(1)}%)</strong></div>
+            <div class="flex justify-between"><span>Declarado en Anamnesis</span><strong>${genDec} (${((genDec/n)*100).toFixed(1)}%)</strong></div>
+          </div>
+        </div>
+      `;
+
+      renderCharts(imcCounts);
+    }
+
+    function renderCharts(imcCounts) {
+      if (typeof Chart === 'undefined') {
+        const msg = '<div class="h-full flex items-center justify-center text-xs text-slate-500 text-center p-4">Gráfico interactivo no disponible sin conexión al CDN de Chart.js. Los cálculos estadísticos superiores están activos.</div>';
+        const c1 = document.getElementById('chart-imc')?.parentElement;
+        const c2 = document.getElementById('chart-bioquimica')?.parentElement;
+        if (c1) c1.innerHTML = msg;
+        if (c2) c2.innerHTML = msg;
+        return;
+      }
+
+      try {
+        const canvasImc = document.getElementById('chart-imc');
+        if (canvasImc) {
+          const ctxImc = canvasImc.getContext('2d');
+          if (imcChartInstance) imcChartInstance.destroy();
+
+          imcChartInstance = new Chart(ctxImc, {
+            type: 'doughnut',
+            data: {
+              labels: ['Bajo peso (<18.5)', 'Normal (18.5-24.9)', 'Sobrepeso (25-29.9)', 'Obesidad (≥30)'],
+              datasets: [{
+                data: [imcCounts['Bajo peso'], imcCounts['Normal'], imcCounts['Sobrepeso'], imcCounts['Obesidad']],
+                backgroundColor: ['#0284C7', '#059669', '#D97706', '#D32F2F'],
+                borderWidth: 2,
+                borderColor: '#FFFFFF'
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 11 } } }
+              }
+            }
+          });
+        }
+
+        const avgGlu = computeDescriptiveStats(biobankRecords.map(r => r.glucosa)).mean;
+        const avgCol = computeDescriptiveStats(biobankRecords.map(r => r.colesterol)).mean;
+        const avgTg = computeDescriptiveStats(biobankRecords.map(r => r.trigliceridos)).mean;
+
+        const canvasBio = document.getElementById('chart-bioquimica');
+        if (canvasBio) {
+          const ctxBio = canvasBio.getContext('2d');
+          if (bioquimicaChartInstance) bioquimicaChartInstance.destroy();
+
+          bioquimicaChartInstance = new Chart(ctxBio, {
+            type: 'bar',
+            data: {
+              labels: ['Glucosa Basal (mg/dL)', 'Colesterol Total (mg/dL)', 'Triglicéridos (mg/dL)'],
+              datasets: [
+                {
+                  label: 'Promedio Cohorte UNIJJAR',
+                  data: [avgGlu.toFixed(1), avgCol.toFixed(1), avgTg.toFixed(1)],
+                  backgroundColor: '#1B1464',
+                  borderRadius: 6
+                },
+                {
+                  label: 'Límite Superior Normal OMS',
+                  data: [99, 199, 149],
+                  backgroundColor: '#FFD700',
+                  borderRadius: 6
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                y: { beginAtZero: true, grid: { color: '#E2E8F0' } },
+                x: { grid: { display: false } }
+              },
+              plugins: {
+                legend: { position: 'bottom', labels: { font: { family: 'Inter', size: 11 } } }
+              }
+            }
+          });
+        }
+      } catch (err) {
+        console.warn('Error al renderizar gráficos:', err);
+      }
+    }
+
+    // =========================================================================
+    // RENDERIZADO DE OBJETIVOS ESPECÍFICOS Y 7 ASIGNATURAS
+    // =========================================================================
+    function renderObjetivosGrid() {
+      const grid = document.getElementById('objetivos-grid');
+      grid.innerHTML = OBJETIVOS_ESPECIFICOS.map(obj => `
+        <div class="bg-slate-50 hover:bg-white rounded-xl p-4 border border-slate-200 hover:border-[#1B1464] transition shadow-2xs flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="px-2.5 py-0.5 bg-[#1B1464] text-[#FFD700] text-xs font-extrabold rounded-md">${obj.num}</span>
+              <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 mb-1.5">${obj.titulo}</h3>
+            <p class="text-xs text-slate-600 leading-relaxed mb-3">${obj.descripcion}</p>
+          </div>
+          <div class="pt-2.5 border-t border-slate-200 text-[11px] space-y-1">
+            <p class="text-slate-700"><strong class="text-[#1B1464]">Técnica:</strong> ${obj.tecnica}</p>
+            <p class="text-slate-700"><strong class="text-emerald-700">Producto:</strong> ${obj.producto}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderSubjectsExplorer() {
+      const tabsContainer = document.getElementById('subjects-tabs');
+      tabsContainer.innerHTML = ASIGNATURAS_SEMESTRE.map((sub, idx) => `
+        <button type="button" onclick="selectSubject('${sub.id}')" id="sub-btn-${sub.id}" class="px-3.5 py-2 rounded-xl text-xs font-bold border transition ${idx === 0 ? 'bg-[#1B1464] text-white border-[#1B1464]' : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-100'}">
+          ${idx + 1}. ${sub.nombre}
+        </button>
+      `).join('');
+      selectSubject(ASIGNATURAS_SEMESTRE[0].id);
+    }
+
+    function selectSubject(subId) {
+      ASIGNATURAS_SEMESTRE.forEach(s => {
+        const btn = document.getElementById(`sub-btn-${s.id}`);
+        if (s.id === subId) {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold border transition bg-[#1B1464] text-white border-[#1B1464] shadow-xs';
+        } else {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-100';
+        }
+      });
+
+      const sub = ASIGNATURAS_SEMESTRE.find(s => s.id === subId);
+      document.getElementById('subject-detail-card').innerHTML = `
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pb-3 border-b border-slate-200">
+          <h4 class="text-base font-extrabold text-[#1B1464]">${sub.nombre}</h4>
+          <span class="px-2.5 py-0.5 bg-[#FFD700] text-[#1B1464] text-[11px] font-bold rounded-full self-start">II Semestre Medicina • UNIJJAR</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-3 text-xs leading-relaxed">
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+            <span class="font-bold uppercase tracking-wider text-slate-500 block mb-1">Enfoque Académico</span>
+            <p class="text-slate-800">${sub.enfoque}</p>
+          </div>
+          <div class="bg-white p-3.5 rounded-lg border border-slate-200">
+            <span class="font-bold uppercase tracking-wider text-[#1B1464] block mb-1">Articulación con el Biobanco Digital</span>
+            <p class="text-slate-800">${sub.aplicacion}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // ARRANQUE INICIAL DE LA APLICACIÓN
+    // =========================================================================
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPersistedRecords();
+      initFormCheckboxes();
+      updateNextExpedienteNumber();
+      setDefaultDateTime();
+      renderObjetivosGrid();
+      renderSubjectsExplorer();
+      updateDashboardKPIs();
+      renderBiobancoTable();
+      renderPatientDemoButtons();
+      safeCreateIcons();
+    });
+  </script>
+</body>
+</html>
